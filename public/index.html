@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FincaHub — Where is the app?</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 38rem;
+        margin: 3rem auto;
+        padding: 0 1.5rem;
+        line-height: 1.55;
+        color: #141414;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          color: #f2f2f2;
+          background: #0f1419;
+        }
+        .note {
+          border-color: #2a3544;
+          color: #a8b0bd;
+        }
+        code {
+          color: #7dd3c0;
+        }
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 650;
+      }
+      a.btn {
+        display: inline-block;
+        margin-top: 0.75rem;
+        padding: 0.65rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        background: #3ecf8e;
+        color: #0a0a0a;
+      }
+      a.btn:hover {
+        filter: brightness(0.95);
+      }
+      .note {
+        margin-top: 2rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid #e2e2e2;
+        font-size: 0.9rem;
+        color: #444;
+      }
+      code {
+        font-size: 0.86em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>This Netlify site is only a landing page</h1>
+    <p>
+      <strong>FincaHub</strong> is built with <strong>Flask</strong> (Python). Netlify does not run that kind
+      of web server on normal static hosting, so your deploy had no <code>index.html</code> and showed
+      “Page not found.”
+    </p>
+    <p>Host the real app on <strong>Render</strong> (or Railway, Fly.io, etc.): same GitHub repo, free tier available.</p>
+    <p>
+      <a
+        class="btn"
+        href="https://render.com/deploy?repo=https://github.com/cecchimatteo/Ecotierra"
+        >Deploy to Render</a
+      >
+    </p>
+    <p class="note">
+      After deploy, open the URL Render gives you (for example
+      <code>https://ecotierra-fincahub.onrender.com</code>). If your service name differs, replace it with yours.
+    </p>
+  </body>
+</html>

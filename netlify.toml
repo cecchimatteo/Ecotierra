@@ -1,0 +1,4 @@
+# Netlify serves static files only. This app is Flask + server-side Jinja; run it on Render.
+[build]
+  publish = "public"
+  command = "echo Static landing page only"

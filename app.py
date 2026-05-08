@@ -131,7 +131,7 @@ DEFAULT_SETTINGS_SLUG = "entities"
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect(url_for("sourcing_dashboard"))
 
 
 @app.route("/sourcing/")
