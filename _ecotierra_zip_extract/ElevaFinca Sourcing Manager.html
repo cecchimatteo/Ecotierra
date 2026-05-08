@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FincaHub — Sourcing</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+<style>
+/* ── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ffffff; color: #333333; font-size: 14px; overflow: hidden; }
+input, select, textarea, button { font-family: inherit; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+/* ── CSS Variables ────────────────────────────────────────── */
+:root {
+  --color-primary:    #344965;
+  --color-secondary:  #0096ba;
+  --color-accent:     #f1562a;
+  --color-positive:   #97be0d;
+  --color-text:       #333333;
+  --color-muted:      #6c757d;
+  --color-bg:         #f8f9fa;
+  --color-white:      #ffffff;
+  --color-border:     #e8e8e8;
+  --color-active-bg:  #e3f2fd;
+  --color-active:     #1976d2;
+  --sidebar-w:        280px;
+  --sidebar-w-c:      64px;
+  --header-h:         70px;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.header {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--color-white);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 30px;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  border-bottom: 1px solid var(--color-border);
+}
+.header-logo { display: flex; align-items: center; gap: 10px; min-width: 140px; }
+.header-logo-mark {
+  width: 36px; height: 36px; border-radius: 6px;
+  background: var(--color-primary);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.header-logo-mark svg { width: 20px; height: 20px; }
+.header-logo-wordmark { display: flex; flex-direction: column; line-height: 1.15; }
+.header-logo-wordmark .eleva { font-size: 15px; font-weight: 700; color: var(--color-primary); letter-spacing: -0.02em; }
+.header-logo-wordmark .finca { font-size: 9px; font-weight: 600; color: var(--color-positive); letter-spacing: 0.12em; text-transform: uppercase; }
+.header-title { font-size: 18px; font-weight: 600; color: #2c3e50; flex: 1; text-align: center; }
+.header-right { display: flex; align-items: center; gap: 18px; min-width: 140px; justify-content: flex-end; }
+.header-icon-btn { background: none; border: none; padding: 0; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: #7f8c8d; font-size: 18px; transition: color 0.2s; position: relative; }
+.header-icon-btn:hover { color: var(--color-secondary); }
+.header-notif-dot { position: absolute; top: 0; right: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--color-accent); border: 1.5px solid var(--color-white); }
+
+/* ICE Ticker in header */
+.ice-ticker-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--color-bg); border: 1px solid var(--color-border);
+  border-radius: 6px; padding: 5px 10px; cursor: default;
+}
+.ice-ticker-label { font-size: 10px; font-weight: 600; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.ice-ticker-price { font-size: 13px; font-weight: 700; color: var(--color-primary); font-variant-numeric: tabular-nums; transition: color 0.4s; }
+.ice-ticker-change { font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ice-up { color: #27ae60; }
+.ice-down { color: var(--color-accent); }
+
+/* ── Sidebar ──────────────────────────────────────────────── */
+.sidebar {
+  position: fixed; top: var(--header-h); left: 0;
+  width: var(--sidebar-w);
+  height: calc(100vh - var(--header-h));
+  background: var(--color-white);
+  border-right: 1px solid var(--color-border);
+  overflow-y: auto; overflow-x: hidden;
+  z-index: 999;
+  transition: width 0.25s ease;
+  display: flex; flex-direction: column;
+}
+.sidebar.collapsed { width: var(--sidebar-w-c); }
+
+.sidebar-top-actions {
+  display: flex; gap: 8px; padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+.sidebar.collapsed .sidebar-top-actions { padding: 12px 8px; flex-direction: column; }
+.sidebar-icon-btn {
+  flex: 1; height: 38px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--color-border); border-radius: 6px;
+  background: var(--color-white); color: #5a6c7d; text-decoration: none;
+  transition: all 0.2s; font-size: 16px; cursor: pointer;
+}
+.sidebar.collapsed .sidebar-icon-btn { flex: none; width: 48px; height: 48px; }
+.sidebar-icon-btn:hover { background: var(--color-bg); color: #2c3e50; border-color: #d1d5db; }
+
+.sidebar-toggle-row {
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 8px 12px 4px; flex-shrink: 0;
+}
+.sidebar.collapsed .sidebar-toggle-row { justify-content: center; }
+.sidebar-toggle {
+  background: none; border: none; color: #7f8c8d; font-size: 16px;
+  cursor: pointer; padding: 4px 6px; border-radius: 4px; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.sidebar-toggle:hover { background: var(--color-bg); color: var(--color-secondary); }
+
+.nav-items { flex: 1; padding: 6px 0 16px; }
+
+.nav-group-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px; font-size: 12px; font-weight: 500;
+  color: #212529; cursor: pointer;
+  border-bottom: 1px solid var(--color-border);
+  min-height: 44px; background: var(--color-white);
+  transition: background 0.15s; user-select: none;
+}
+.sidebar.collapsed .nav-group-header { justify-content: center; padding: 10px 0; }
+.nav-group-header:hover { background: var(--color-bg); }
+.nav-group-header .gh-left { display: flex; align-items: center; gap: 12px; }
+.sidebar.collapsed .nav-group-header .gh-label,
+.sidebar.collapsed .nav-group-header .gh-chevron { display: none; }
+.nav-group-header i { font-size: 14px; color: var(--color-muted); width: 18px; min-width: 18px; text-align: center; }
+.gh-chevron { font-size: 10px; color: var(--color-muted); transition: transform 0.2s; }
+.nav-group-header.collapsed-group .gh-chevron { transform: rotate(-90deg); }
+
+.nav-group-items { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
+.nav-group-items.open { max-height: 800px; }
+.sidebar.collapsed .nav-group-items { display: none; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 20px 10px 40px;
+  font-size: 12px; font-weight: 400; color: #5a6c7d;
+  text-decoration: none; border-left: 3px solid transparent;
+  transition: all 0.15s; cursor: pointer; min-height: 40px;
+  background: var(--color-white);
+}
+.sidebar.collapsed .nav-item { justify-content: center; padding: 12px 0; }
+.sidebar.collapsed .nav-item .ni-label { display: none; }
+.nav-item:hover { background: #ecf0f1; color: #2c3e50; border-left-color: var(--color-secondary); }
+.nav-item.active { background: var(--color-active-bg); color: var(--color-active); border-left-color: var(--color-active); font-weight: 500; }
+.nav-item i { font-size: 14px; width: 18px; min-width: 18px; text-align: center; flex-shrink: 0; }
+
+/* User info at sidebar bottom */
+.sidebar-user {
+  border-top: 1px solid var(--color-border);
+  padding: 12px 16px; display: flex; gap: 10px; align-items: center; flex-shrink: 0;
+}
+.sidebar.collapsed .sidebar-user { justify-content: center; padding: 12px 0; }
+.sidebar.collapsed .sidebar-user-info { display: none; }
+.sidebar-avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--color-primary);
+  color: #fff; font-size: 12px; font-weight: 700; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.sidebar-user-info-name { font-size: 12px; font-weight: 600; color: #212529; }
+.sidebar-user-info-role { font-size: 11px; color: var(--color-muted); }
+
+/* ── Main Content ─────────────────────────────────────────── */
+.main-content {
+  margin-top: var(--header-h); margin-left: var(--sidebar-w);
+  height: calc(100vh - var(--header-h));
+  overflow-y: auto; background: var(--color-bg);
+  transition: margin-left 0.25s ease, width 0.25s ease;
+}
+.main-content.sidebar-collapsed { margin-left: var(--sidebar-w-c); }
+.content-wrapper { padding: 24px 28px; }
+
+/* ── Page header ──────────────────────────────────────────── */
+.page-header { margin-bottom: 20px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.page-header-left .breadcrumb { font-size: 12px; color: var(--color-muted); margin-bottom: 4px; display: flex; gap: 4px; align-items: center; }
+.page-header-left .breadcrumb a { color: var(--color-secondary); text-decoration: none; cursor: pointer; }
+.page-header-left .breadcrumb a:hover { text-decoration: underline; }
+.page-header-left h1 { font-size: 20px; font-weight: 600; color: #2c3e50; margin: 0; }
+.page-header-right { display: flex; gap: 8px; align-items: center; }
+
+/* ── Cards & Tables ───────────────────────────────────────── */
+.card { background: var(--color-white); border: 1px solid var(--color-border); border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.card-header-bar { background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.card-header-bar h2 { font-size: 14px; font-weight: 600; color: #2c3e50; margin: 0; }
+.card-body { padding: 20px; }
+.card-body-p0 { padding: 0; }
+
+.table { width: 100%; border-collapse: collapse; background: var(--color-white); }
+.table thead th { background: var(--color-bg); border-bottom: 2px solid var(--color-border); color: #2c3e50; font-weight: 600; font-size: 12px; padding: 12px; vertical-align: middle; text-align: left; white-space: nowrap; }
+.table tbody td { padding: 11px 12px; vertical-align: middle; border-bottom: 1px solid #f1f1f1; color: #5a6c7d; font-size: 13px; }
+.table tbody tr:last-child td { border-bottom: none; }
+.table tbody tr:hover td { background: var(--color-bg); }
+.table tbody tr { cursor: default; transition: background 0.15s; }
+.table tbody tr.clickable { cursor: pointer; }
+
+/* ── Status Pills ─────────────────────────────────────────── */
+.pill { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; white-space: nowrap; border: 1px solid transparent; }
+.pill-green  { background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; }
+.pill-blue   { background: #e3f2fd; color: #1565c0; border-color: #bbdefb; }
+.pill-amber  { background: #fff8e1; color: #e65100; border-color: #ffe0b2; }
+.pill-red    { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
+.pill-gray   { background: #f5f5f5; color: #616161; border-color: #e0e0e0; }
+.pill-indigo { background: #e8eaf6; color: #283593; border-color: #c5cae9; }
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; white-space: nowrap; }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+.btn-primary { background: var(--color-primary); color: #fff; }
+.btn-primary:hover { background: #2a3d55; }
+.btn-secondary { background: var(--color-secondary); color: #fff; }
+.btn-secondary:hover { background: #007a99; }
+.btn-outline { background: transparent; color: #5a6c7d; border: 1px solid var(--color-border); }
+.btn-outline:hover { background: var(--color-bg); border-color: #adb5bd; }
+.btn-outline-primary { background: transparent; color: var(--color-primary); border: 1px solid var(--color-primary); }
+.btn-outline-primary:hover { background: rgba(52,73,101,0.06); }
+.btn-accent { background: var(--color-accent); color: #fff; }
+.btn-accent:hover { background: #d14420; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Filter bar ───────────────────────────────────────────── */
+.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-pill { padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; border: 1.5px solid var(--color-border); background: var(--color-white); color: var(--color-muted); cursor: pointer; transition: all 0.15s; }
+.filter-pill.active { border-color: var(--color-primary); background: var(--color-primary); color: #fff; }
+.filter-pill:hover:not(.active) { border-color: #adb5bd; color: #333; }
+
+/* ── Search ───────────────────────────────────────────────── */
+.search-wrap { position: relative; display: flex; align-items: center; }
+.search-wrap i { position: absolute; left: 9px; color: #9ca3af; font-size: 14px; pointer-events: none; }
+.search-input { padding: 6px 12px 6px 30px; border: 1px solid var(--color-border); border-radius: 6px; font-size: 13px; outline: none; width: 220px; background: var(--color-white); color: var(--color-text); transition: border-color 0.15s; }
+.search-input:focus { border-color: var(--color-secondary); }
+
+/* ── KPI Cards ────────────────────────────────────────────── */
+.kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+.kpi-card { background: var(--color-white); border: 1px solid var(--color-border); border-radius: 6px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 14px; cursor: pointer; transition: box-shadow 0.15s; }
+.kpi-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.10); }
+.kpi-icon { width: 42px; height: 42px; border-radius: 6px; background: #f0f4f8; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; color: var(--color-primary); }
+.kpi-icon.warn { background: #fff5f5; color: var(--color-accent); }
+.kpi-icon.ok { background: #f0fdf0; color: #27ae60; }
+.kpi-icon.info { background: #e8f4fd; color: var(--color-secondary); }
+.kpi-value { font-size: 28px; font-weight: 700; color: #2c3e50; line-height: 1; }
+.kpi-label { font-size: 12px; color: var(--color-muted); font-weight: 500; margin-top: 3px; }
+
+/* ── Delivery dot ─────────────────────────────────────────── */
+.del-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+.del-green { background: #27ae60; }
+.del-amber { background: #f59e0b; }
+.del-red   { background: var(--color-accent); }
+
+/* ── Tabs ─────────────────────────────────────────────────── */
+.tabs { display: flex; border-bottom: 2px solid var(--color-border); margin-bottom: 20px; gap: 0; }
+.tab-btn { padding: 10px 18px; font-size: 13px; font-weight: 500; border: none; background: none; cursor: pointer; color: var(--color-muted); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; }
+.tab-btn.active { color: var(--color-primary); border-bottom-color: var(--color-primary); font-weight: 600; }
+.tab-btn:hover:not(.active) { color: #333; }
+
+/* ── Section head ─────────────────────────────────────────── */
+.section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.section-head h3 { font-size: 14px; font-weight: 600; color: #2c3e50; margin: 0; }
+
+/* ── Form fields ──────────────────────────────────────────── */
+.form-label { font-size: 12px; font-weight: 600; color: #374151; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.form-control { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; outline: none; background: var(--color-white); color: var(--color-text); transition: border-color 0.15s; }
+.form-control:focus { border-color: var(--color-secondary); }
+.form-control:read-only { background: var(--color-bg); color: var(--color-muted); cursor: not-allowed; }
+
+/* ── Notification dropdown ────────────────────────────────── */
+.notif-dropdown { position: absolute; top: calc(100% + 12px); right: 0; width: 310px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 2000; }
+.notif-header { padding: 12px 16px; font-size: 13px; font-weight: 600; color: #2c3e50; border-bottom: 1px solid var(--color-border); }
+.notif-item { display: flex; gap: 10px; padding: 11px 16px; border-bottom: 1px solid #fafafa; cursor: pointer; transition: background 0.12s; }
+.notif-item:hover { background: var(--color-bg); }
+.notif-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.notif-msg { font-size: 12px; color: #374151; line-height: 1.4; flex: 1; }
+.notif-time { font-size: 11px; color: var(--color-muted); white-space: nowrap; }
+.notif-footer { padding: 9px 16px; text-align: center; }
+.notif-footer a { font-size: 12px; color: var(--color-secondary); text-decoration: none; }
+
+/* ── Summary strip ────────────────────────────────────────── */
+.summary-strip {
+  background: var(--color-primary); color: #fff; border-radius: 6px;
+  padding: 14px 20px; display: flex; gap: 28px; flex-wrap: wrap;
+  margin-bottom: 20px; align-items: center;
+}
+.summary-strip-item { display: flex; flex-direction: column; gap: 2px; }
+.summary-strip-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.6; }
+.summary-strip-value { font-size: 14px; font-weight: 600; }
+
+/* ── Gate checklist ───────────────────────────────────────── */
+.gate-item { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid #f3f4f6; }
+.gate-item:last-child { border-bottom: none; }
+.gate-check { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.gate-check.done { color: #27ae60; }
+.gate-check.todo { color: #d1d5db; }
+.gate-label { font-size: 12px; line-height: 1.45; }
+.gate-label.done { color: #374151; }
+.gate-label.todo { color: var(--color-muted); }
+
+/* ── Audit trail ──────────────────────────────────────────── */
+.audit-row { display: grid; grid-template-columns: 140px 100px 1fr; gap: 8px; padding: 7px 0; border-bottom: 1px solid #f3f4f6; font-size: 12px; }
+.audit-row:last-child { border-bottom: none; }
+.audit-ts { color: var(--color-muted); font-variant-numeric: tabular-nums; }
+.audit-user { color: var(--color-muted); }
+.audit-msg { color: #374151; }
+
+/* ── Discrepancy indicator ────────────────────────────────── */
+.disc-box { padding: 9px 14px; border-radius: 6px; text-align: center; }
+.disc-box.neutral { background: var(--color-bg); border: 1px solid var(--color-border); }
+.disc-box.ok { background: #f0fdf0; border: 1.5px solid #86efac; }
+.disc-box.warn { background: #fff8e1; border: 1.5px solid #f59e0b; }
+.disc-box .disc-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-muted); margin-bottom: 4px; }
+.disc-box .disc-value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ── Photo drop zone ──────────────────────────────────────── */
+.photo-zone { border: 2px dashed #d1d5db; border-radius: 6px; padding: 24px 16px; text-align: center; cursor: pointer; transition: border-color 0.15s; }
+.photo-zone:hover { border-color: var(--color-primary); }
+
+/* ── Pagination ───────────────────────────────────────────── */
+.pagination { display: flex; gap: 4px; align-items: center; }
+.pagination button { padding: 4px 10px; border: 1px solid var(--color-border); border-radius: 5px; background: var(--color-white); font-size: 12px; color: #5a6c7d; cursor: pointer; transition: all 0.15s; }
+.pagination button:hover { background: var(--color-secondary); border-color: var(--color-secondary); color: #fff; }
+.pagination .pg-info { font-size: 12px; color: var(--color-muted); padding: 0 6px; }
+
+/* ── Placeholder screen ───────────────────────────────────── */
+.placeholder-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 14px; color: var(--color-muted); }
+.placeholder-screen h2 { font-size: 18px; font-weight: 600; color: #5a6c7d; }
+
+/* ── Alert / Note box ─────────────────────────────────────── */
+.alert-box { display: flex; gap: 10px; padding: 10px 14px; border-radius: 6px; font-size: 12px; align-items: flex-start; }
+.alert-warn { background: #fff8e1; border: 1px solid #f59e0b; color: #92400e; }
+.alert-err  { background: #fff5f5; border: 1px solid #fca5a5; color: #991b1b; }
+.alert-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+
+/* ── Tweaks panel override ────────────────────────────────── */
+.twk-panel { z-index: 3000 !important; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<template id="__bundler_thumbnail" data-bg-color="#ffffff">
+  <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+    <!-- Header bar -->
+    <rect x="0" y="0" width="120" height="12" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <rect x="6" y="3" width="18" height="6" rx="1.5" fill="#344965"/>
+    <rect x="42" y="4" width="36" height="4" rx="1" fill="#e8e8e8"/>
+    <!-- Sidebar -->
+    <rect x="0" y="12" width="22" height="68" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <rect x="3" y="16" width="16" height="3" rx="1" fill="#e3f2fd"/>
+    <rect x="3" y="21" width="12" height="2" rx="1" fill="#f0f0f0"/>
+    <rect x="3" y="25" width="14" height="2" rx="1" fill="#f0f0f0"/>
+    <rect x="3" y="29" width="12" height="2" rx="1" fill="#f0f0f0"/>
+    <rect x="3" y="35" width="14" height="2" rx="1" fill="#f0f0f0"/>
+    <rect x="3" y="39" width="10" height="2" rx="1" fill="#f0f0f0"/>
+    <!-- Content area -->
+    <rect x="22" y="12" width="98" height="68" fill="#f8f9fa"/>
+    <!-- KPI cards row -->
+    <rect x="25" y="16" width="16" height="10" rx="1.5" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <rect x="43" y="16" width="16" height="10" rx="1.5" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <rect x="61" y="16" width="16" height="10" rx="1.5" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <rect x="79" y="16" width="16" height="10" rx="1.5" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <rect x="97" y="16" width="16" height="10" rx="1.5" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <!-- Supplier table -->
+    <rect x="25" y="29" width="72" height="32" rx="1.5" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <rect x="25" y="29" width="72" height="5" rx="1.5" fill="#f8f9fa"/>
+    <rect x="27" y="36" width="40" height="1.5" rx="0.5" fill="#f0f0f0"/>
+    <rect x="27" y="40" width="40" height="1.5" rx="0.5" fill="#f0f0f0"/>
+    <rect x="27" y="44" width="40" height="1.5" rx="0.5" fill="#f0f0f0"/>
+    <rect x="27" y="48" width="40" height="1.5" rx="0.5" fill="#f0f0f0"/>
+    <rect x="27" y="52" width="40" height="1.5" rx="0.5" fill="#f0f0f0"/>
+    <!-- Right sidebar cards -->
+    <rect x="100" y="29" width="17" height="14" rx="1.5" fill="#344965"/>
+    <rect x="100" y="45" width="17" height="16" rx="1.5" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <!-- Bottom row -->
+    <rect x="25" y="63" width="45" height="14" rx="1.5" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <!-- Chart line -->
+    <polyline points="27,74 31,72 35,71 39,70 42,68 46,69 50,67 54,66 58,65 62,65 66,64" fill="none" stroke="#0096ba" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="72" y="63" width="45" height="14" rx="1.5" fill="#ffffff" stroke="#e8e8e8" stroke-width="0.5"/>
+    <rect x="74" y="66" width="40" height="1.5" rx="0.5" fill="#f0f0f0"/>
+    <rect x="74" y="70" width="36" height="1.5" rx="0.5" fill="#f0f0f0"/>
+    <rect x="74" y="74" width="38" height="1.5" rx="0.5" fill="#f0f0f0"/>
+  </svg>
+</template>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+// ── Tweaks panel (inline) ─────────────────────────────────────────────────
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:3000;width:260px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;background:rgba(250,249,247,.92);color:#29261b;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:.5px solid rgba(255,255,255,.6);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.18);font:12px/1.4 'Inter',sans-serif;overflow:hidden;display:none}
+  .twk-panel.visible{display:flex}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);width:22px;height:22px;border-radius:6px;cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center}
+  .twk-x:hover{background:rgba(0,0,0,.08)}
+  .twk-body{padding:4px 14px 14px;display:flex;flex-direction:column;gap:8px;overflow-y:auto}
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(41,38,27,.45);padding:8px 0 2px}
+  .twk-row{display:flex;flex-direction:column;gap:4px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{font-size:11.5px;font-weight:500;color:rgba(41,38,27,.72)}
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;border:.5px solid rgba(0,0,0,.12);border-radius:6px;background:rgba(255,255,255,.7);font:inherit;outline:none;font-size:12px}
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;background:rgba(0,0,0,.15);transition:background .15s;cursor:pointer;padding:0;flex-shrink:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s;display:block}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:6px;background:rgba(0,0,0,.78);color:#fff;font:inherit;font-size:11.5px;cursor:pointer;width:100%;text-align:left}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;background:rgba(0,0,0,.06)}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;background:transparent;font:inherit;font-size:11px;font-weight:500;min-height:22px;border-radius:6px;cursor:pointer;padding:4px 6px}
+  .twk-seg button.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+`;
+
+function useTweaks(defaults) {
+  if (!document.getElementById('__twk_style')) {
+    const s = document.createElement('style'); s.id = '__twk_style'; s.textContent = __TWEAKS_STYLE; document.head.appendChild(s);
+  }
+  const [values, setValues] = React.useState(defaults);
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const handler = e => {
+      if (e.data?.type === '__activate_edit_mode') setVisible(true);
+      if (e.data?.type === '__deactivate_edit_mode') setVisible(false);
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', handler);
+  }, []);
+  const setTweak = React.useCallback((k, v) => {
+    const edits = typeof k === 'object' ? k : { [k]: v };
+    setValues(p => ({ ...p, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+  }, []);
+  return [values, setTweak, visible, setVisible];
+}
+
+// ── ICE Ticker hook ───────────────────────────────────────────────────────
+function useICEPrice() {
+  const [price, setPrice] = React.useState(382.50);
+  const [change, setChange] = React.useState(+1.25);
+  const [flash, setFlash] = React.useState(null);
+  const open = React.useRef(381.25);
+  React.useEffect(() => {
+    const iv = setInterval(() => {
+      setPrice(p => {
+        const delta = (Math.random() - 0.49) * 0.55;
+        const next = Math.round((p + delta) * 100) / 100;
+        setChange(Math.round((next - open.current) * 100) / 100);
+        setFlash(delta > 0 ? 'up' : 'down');
+        window.dispatchEvent(new CustomEvent('ice-update', { detail: next }));
+        setTimeout(() => setFlash(null), 500);
+        return next;
+      });
+    }, 3500);
+    return () => clearInterval(iv);
+  }, []);
+  return { price, change, flash };
+}
+
+// ── Status pill helper ────────────────────────────────────────────────────
+function statusClass(s) {
+  const map = {
+    ACTIVE: 'green', AVAILABLE: 'green', PASS: 'green', APPROVED: 'green', FULLY_RECEIVED: 'green',
+    PENDING: 'blue', IN_PROGRESS: 'blue', PARTIALLY_RECEIVED: 'blue',
+    AT_RISK: 'amber', OVERDUE: 'amber',
+    REJECTED: 'red', CANCELLED: 'red', EXPIRED: 'red',
+    DRAFT: 'gray', DISMISSED: 'gray',
+    CONFIRMED: 'indigo', CONVERTED: 'indigo',
+  };
+  return 'pill pill-' + (map[s] || 'gray');
+}
+function statusLabel(s) {
+  const map = {
+    ACTIVE: 'Active', AVAILABLE: 'Available', PASS: 'Pass', APPROVED: 'Approved',
+    PENDING: 'Pending', IN_PROGRESS: 'In Progress',
+    AT_RISK: 'At Risk', OVERDUE: 'Overdue',
+    REJECTED: 'Rejected', CANCELLED: 'Cancelled', EXPIRED: 'Expired',
+    DRAFT: 'Draft', DISMISSED: 'Dismissed',
+    CONFIRMED: 'Confirmed', CONVERTED: 'Converted',
+    PARTIALLY_RECEIVED: 'Part. Received', FULLY_RECEIVED: 'Fully Received',
+  };
+  return map[s] || s;
+}
+function StatusPill({ status }) {
+  return <span className={statusClass(status)}>{statusLabel(status)}</span>;
+}
+
+// ── HEADER ────────────────────────────────────────────────────────────────
+function Header({ ice }) {
+  const [notifOpen, setNotifOpen] = React.useState(false);
+  const notifs = [
+    { color: '#f1562a', msg: 'Lot #L-2025-0438: weight discrepancy 0.8%', time: '8:55 AM' },
+    { color: '#f59e0b', msg: 'Fixation FIX-2025-0031 expired without fill', time: 'Yesterday' },
+    { color: '#27ae60', msg: 'Lot #L-2025-0440 passed post-milling QC', time: 'Yesterday' },
+    { color: '#0096ba', msg: 'Counter-bid received on REQ-2025-0014', time: 'Apr 30' },
+  ];
+  const isUp = ice.change >= 0;
+  return (
+    <header className="header">
+      <div className="header-logo">
+        <div className="header-logo-mark">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3C8 3 5 7 5 11c0 1.5 2.5 3.5 7 3.5s7-2 7-3.5c0-4-3-8-7-8z" fill="#97be0d"/>
+            <path d="M12 14.5V21" stroke="#97be0d" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <div className="header-logo-wordmark">
+          <span className="eleva">Eleva</span>
+          <span className="finca">Finca</span>
+        </div>
+      </div>
+
+      <div className="header-title">FincaHub</div>
+
+      <div className="header-right">
+        {/* ICE ticker */}
+        <div className="ice-ticker-badge">
+          <span className="ice-ticker-label">ICE C Jul-25</span>
+          <span className="ice-ticker-price" style={{ color: ice.flash === 'up' ? '#27ae60' : ice.flash === 'down' ? '#f1562a' : undefined }}>
+            {ice.price.toFixed(2)}
+          </span>
+          <span className={`ice-ticker-change ${isUp ? 'ice-up' : 'ice-down'}`}>
+            {isUp ? '▲' : '▼'}{Math.abs(ice.change).toFixed(2)}
+          </span>
+        </div>
+
+        <button className="header-icon-btn"><i className="bi bi-info-circle"></i></button>
+        <button className="header-icon-btn"><i className="bi bi-gear"></i></button>
+
+        {/* Notifications */}
+        <div style={{ position: 'relative' }}>
+          <button className="header-icon-btn" onClick={() => setNotifOpen(v => !v)}>
+            <i className="bi bi-bell"></i>
+            <span className="header-notif-dot"></span>
+          </button>
+          {notifOpen && (
+            <div className="notif-dropdown">
+              <div className="notif-header">Notifications</div>
+              {notifs.map((n, i) => (
+                <div key={i} className="notif-item">
+                  <span className="notif-dot" style={{ background: n.color }}></span>
+                  <span className="notif-msg">{n.msg}</span>
+                  <span className="notif-time">{n.time}</span>
+                </div>
+              ))}
+              <div className="notif-footer"><a href="#">View all</a></div>
+            </div>
+          )}
+        </div>
+
+        <button className="header-icon-btn"><i className="bi bi-person-circle" style={{ fontSize: 22 }}></i></button>
+      </div>
+    </header>
+  );
+}
+
+// ── SIDEBAR ───────────────────────────────────────────────────────────────
+const NAV_GROUPS = [
+  {
+    id: 'sourcing', label: 'Sourcing', icon: 'bi-shop',
+    items: [
+      { id: 'dashboard',    label: 'Home',            icon: 'bi-house' },
+      { id: 'daily-offers', label: 'Daily Offers',    icon: 'bi-card-list' },
+      { id: 'po-list',      label: 'Purchase Orders', icon: 'bi-file-earmark-text' },
+      { id: 'receive-lot',  label: 'Lots',            icon: 'bi-box-seam' },
+    ]
+  },
+  {
+    id: 'milling', label: 'Milling', icon: 'bi-gear-wide-connected',
+    items: [
+      { id: 'milling-batches', label: 'Milling Batches', icon: 'bi-collection' },
+      { id: 'yield-reports',   label: 'Yield Reports',   icon: 'bi-bar-chart-line' },
+    ]
+  },
+  {
+    id: 'warehouse', label: 'Warehouse', icon: 'bi-building',
+    items: [
+      { id: 'inventory',  label: 'Inventory',   icon: 'bi-archive' },
+      { id: 'movements',  label: 'Movements',   icon: 'bi-arrow-left-right' },
+    ]
+  },
+  {
+    id: 'qc', label: 'Quality Control', icon: 'bi-clipboard2-check',
+    items: [
+      { id: 'cupping',    label: 'Cupping',     icon: 'bi-cup-hot' },
+      { id: 'grading',    label: 'Grading',     icon: 'bi-award' },
+    ]
+  },
+  {
+    id: 'fixation', label: 'Sales & Price Fixation', icon: 'bi-graph-up-arrow',
+    items: [
+      { id: 'requirements',   label: 'Client Requirements', icon: 'bi-clipboard' },
+      { id: 'fix-queue',      label: 'Fixation Queue',       icon: 'bi-lightning' },
+    ]
+  },
+  {
+    id: 'logistics', label: 'Logistics', icon: 'bi-truck',
+    items: [
+      { id: 'shipments', label: 'Shipments', icon: 'bi-ship' },
+    ]
+  },
+  {
+    id: 'admin', label: 'Administration', icon: 'bi-sliders',
+    items: [
+      { id: 'suppliers', label: 'Suppliers',   icon: 'bi-people' },
+      { id: 'settings',  label: 'Settings',    icon: 'bi-gear' },
+    ]
+  },
+];
+
+function Sidebar({ active, onNavigate, collapsed, onToggle }) {
+  const [openGroups, setOpenGroups] = React.useState({ sourcing: true });
+  const toggleGroup = id => setOpenGroups(g => ({ ...g, [id]: !g[id] }));
+
+  return (
+    <nav className={`sidebar${collapsed ? ' collapsed' : ''}`}>
+      {/* Top action buttons */}
+      <div className="sidebar-top-actions">
+        <button className="sidebar-icon-btn" title="Home" onClick={() => onNavigate('dashboard')}>
+          <i className="bi bi-house"></i>
+        </button>
+        <button className="sidebar-icon-btn" title="Search">
+          <i className="bi bi-search"></i>
+        </button>
+      </div>
+
+      {/* Toggle */}
+      <div className="sidebar-toggle-row">
+        <button className="sidebar-toggle" onClick={onToggle} title={collapsed ? 'Expand' : 'Collapse'}>
+          <i className={`bi ${collapsed ? 'bi-chevron-right' : 'bi-chevron-left'}`}></i>
+        </button>
+      </div>
+
+      {/* Nav groups */}
+      <div className="nav-items">
+        {NAV_GROUPS.map(group => (
+          <div key={group.id}>
+            <div
+              className={`nav-group-header${openGroups[group.id] ? '' : ' collapsed-group'}`}
+              onClick={() => toggleGroup(group.id)}
+            >
+              <div className="gh-left">
+                <i className={`bi ${group.icon}`}></i>
+                <span className="gh-label">{group.label}</span>
+              </div>
+              <i className="bi bi-chevron-down gh-chevron"></i>
+            </div>
+            <div className={`nav-group-items${openGroups[group.id] ? ' open' : ''}`}>
+              {group.items.map(item => (
+                <div
+                  key={item.id}
+                  className={`nav-item${active === item.id || (active === 'po-detail' && item.id === 'po-list') ? ' active' : ''}`}
+                  onClick={() => onNavigate(item.id)}
+                  title={collapsed ? item.label : undefined}
+                >
+                  <i className={`bi ${item.icon}`}></i>
+                  <span className="ni-label">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* User info */}
+      <div className="sidebar-user">
+        <div className="sidebar-avatar">MS</div>
+        <div className="sidebar-user-info">
+          <div className="sidebar-user-info-name">Marcos Santos</div>
+          <div className="sidebar-user-info-role">Sourcing Manager</div>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+// ── ICE HISTORY CHART ────────────────────────────────────────────────────
+function IceRangeButtons() {
+  const [active, setActive] = React.useState('1M');
+  return (
+    <div style={{ display: 'flex', gap: 4, marginLeft: 'auto' }}>
+      {['5D','1M','3M','6M'].map(r => (
+        <IceRangeBtn key={r} label={r} active={active === r} onClick={() => setActive(r)} />
+      ))}
+    </div>
+  );
+}
+
+function IceRangeBtn({ label, active, onClick }) {
+  return (
+    <button onClick={onClick} style={{
+      padding: '3px 9px', borderRadius: 5, fontSize: 11, fontWeight: 600, cursor: 'pointer',
+      border: '1px solid', transition: 'all 0.15s',
+      borderColor: active ? 'var(--color-secondary)' : 'var(--color-border)',
+      background: active ? 'var(--color-secondary)' : 'transparent',
+      color: active ? '#fff' : 'var(--color-muted)',
+    }}>{label}</button>
+  );
+}
+
+function IceHistoryChart() {
+  const canvasRef = React.useRef(null);
+  const [livePrice, setLivePrice] = React.useState(382.50);
+
+  // 1-month daily ICE C prices (mock realistic data)
+  const baseData = [
+    365.50, 367.20, 366.80, 369.10, 371.40, 370.60, 373.20, 372.80, 375.10, 374.30,
+    376.90, 375.50, 378.20, 377.60, 380.10, 379.40, 381.90, 380.70, 383.20, 382.50,
+    384.10, 383.30, 381.80, 382.90, 383.60, 382.10, 381.50, 382.80, 383.40, 382.50,
+  ];
+
+  const [data, setData] = React.useState(baseData);
+
+  React.useEffect(() => {
+    const h = e => {
+      setLivePrice(e.detail);
+      setData(prev => {
+        const next = [...prev.slice(1), e.detail];
+        return next;
+      });
+    };
+    window.addEventListener('ice-update', h);
+    return () => window.removeEventListener('ice-update', h);
+  }, []);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.offsetWidth;
+    const H = canvas.offsetHeight;
+    canvas.width = W * window.devicePixelRatio;
+    canvas.height = H * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+    const pad = { top: 12, right: 12, bottom: 28, left: 44 };
+    const chartW = W - pad.left - pad.right;
+    const chartH = H - pad.top - pad.bottom;
+
+    const minV = Math.min(...data) - 2;
+    const maxV = Math.max(...data) + 2;
+    const range = maxV - minV;
+
+    const xScale = i => pad.left + (i / (data.length - 1)) * chartW;
+    const yScale = v => pad.top + chartH - ((v - minV) / range) * chartH;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Grid lines
+    ctx.strokeStyle = '#f0f0f0';
+    ctx.lineWidth = 1;
+    const ticks = 4;
+    for (let t = 0; t <= ticks; t++) {
+      const v = minV + (range / ticks) * t;
+      const y = yScale(v);
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y);
+      ctx.lineTo(pad.left + chartW, y);
+      ctx.stroke();
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(v.toFixed(0), pad.left - 6, y + 3);
+    }
+
+    // X axis labels (every 5 days)
+    const months = ['Apr 4','Apr 9','Apr 14','Apr 19','Apr 24','May 4'];
+    ctx.fillStyle = '#9ca3af';
+    ctx.font = '10px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    for (let i = 0; i < months.length; i++) {
+      const x = pad.left + (i / (months.length - 1)) * chartW;
+      ctx.fillText(months[i], x, H - 6);
+    }
+
+    // Fill gradient
+    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
+    grad.addColorStop(0, 'rgba(0,150,186,0.18)');
+    grad.addColorStop(1, 'rgba(0,150,186,0.01)');
+    ctx.beginPath();
+    ctx.moveTo(xScale(0), yScale(data[0]));
+    for (let i = 1; i < data.length; i++) {
+      ctx.lineTo(xScale(i), yScale(data[i]));
+    }
+    ctx.lineTo(xScale(data.length - 1), pad.top + chartH);
+    ctx.lineTo(xScale(0), pad.top + chartH);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    ctx.moveTo(xScale(0), yScale(data[0]));
+    for (let i = 1; i < data.length; i++) {
+      ctx.lineTo(xScale(i), yScale(data[i]));
+    }
+    ctx.strokeStyle = '#0096ba';
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+
+    // Last point dot
+    const lastX = xScale(data.length - 1);
+    const lastY = yScale(data[data.length - 1]);
+    ctx.beginPath();
+    ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#0096ba';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Current price label
+    ctx.fillStyle = '#0096ba';
+    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(data[data.length - 1].toFixed(2), lastX - 6, lastY - 8);
+
+  }, [data]);
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <canvas ref={canvasRef} style={{ width: '100%', height: 160, display: 'block' }} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 11, color: 'var(--color-muted)' }}>
+        <span>30-day range: <strong style={{ color: '#f1562a' }}>365.50</strong> – <strong style={{ color: '#27ae60' }}>384.10</strong> ¢/lb</span>
+        <span style={{ color: 'var(--color-secondary)', fontWeight: 600 }}>Live: {livePrice.toFixed(2)} ¢/lb</span>
+      </div>
+    </div>
+  );
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────
+function DashboardScreen({ onNavigate, ice }) {
+  const [supplierFilter, setSupplierFilter] = React.useState('ALL');
+  const [supplierSearch, setSupplierSearch] = React.useState('');
+
+  const kpis = [
+    { label: 'Active POs',        value: 14, sub: '3 pending fixation',       icon: 'bi-file-earmark-text', cls: '',     screen: 'po-list' },
+    { label: 'Lots Pending',      value: 7,  sub: '2 overdue',                icon: 'bi-box-seam',          cls: 'warn', screen: 'receive-lot' },
+    { label: 'Open Daily Offers', value: 23, sub: 'Updated 18 min ago',       icon: 'bi-card-list',         cls: 'info', screen: 'daily-offers' },
+    { label: 'Pending Fixation',  value: 3,  sub: 'Action required',          icon: 'bi-lightning',         cls: 'warn', screen: null },
+    { label: 'Client Reqs',       value: 5,  sub: '2 eligible for this mill', icon: 'bi-clipboard',         cls: 'ok',   screen: null },
+  ];
+
+  const activity = [
+    { color: '#27ae60', msg: 'Lot #L-2025-0441 received — 312 kg, Finca La Palma', time: '09:42' },
+    { color: '#0096ba', msg: 'New daily offer: Coop San Marcos — 600 kg Bourbon Natural', time: '09:18' },
+    { color: '#f1562a', msg: 'QC Flag: Lot #L-2025-0438 weight discrepancy 0.8%', time: '08:55' },
+    { color: '#344965', msg: 'PO #PO-2025-0092 confirmed — El Paraíso Estate', time: '08:30' },
+    { color: '#f59e0b', msg: 'Fixation FIX-2025-0031 expired without fill', time: 'Yesterday' },
+    { color: '#27ae60', msg: 'Lot #L-2025-0440 passed post-milling QC', time: 'Yesterday' },
+  ];
+
+  const suppliers = [
+    { name: 'El Paraíso Estate',   type: 'Estate',      region: 'Huila',         activePOs: 3, lotsKg: 600,  offers: 2, fixPending: 2, delStatus: 'green', lastActivity: 'Today' },
+    { name: 'Coop San Marcos',     type: 'Cooperative', region: 'Cauca',         activePOs: 4, lotsKg: 1440, offers: 3, fixPending: 0, delStatus: 'red',   lastActivity: 'Today' },
+    { name: 'Finca La Palma',      type: 'Estate',      region: 'Nariño',        activePOs: 2, lotsKg: 480,  offers: 1, fixPending: 1, delStatus: 'amber', lastActivity: 'Today' },
+    { name: 'Coop Los Andes',      type: 'Cooperative', region: 'Nariño',        activePOs: 1, lotsKg: 312,  offers: 2, fixPending: 0, delStatus: 'green', lastActivity: 'May 3' },
+    { name: 'Finca Las Nubes',     type: 'Estate',      region: 'Antioquia',     activePOs: 1, lotsKg: 288,  offers: 0, fixPending: 0, delStatus: 'green', lastActivity: 'May 2' },
+    { name: 'Coop La Unión',       type: 'Cooperative', region: 'Huila',         activePOs: 2, lotsKg: 720,  offers: 1, fixPending: 0, delStatus: 'green', lastActivity: 'May 1' },
+    { name: 'Hacienda La Gracia',  type: 'Estate',      region: 'Tolima',        activePOs: 1, lotsKg: 0,    offers: 1, fixPending: 0, delStatus: 'amber', lastActivity: 'Apr 30' },
+    { name: 'Finca El Roble',      type: 'Estate',      region: 'Sierra Nevada', activePOs: 0, lotsKg: 0,    offers: 0, fixPending: 0, delStatus: 'green', lastActivity: 'Apr 28' },
+  ];
+
+  const supplierFilters = [
+    { label: 'All', value: 'ALL' },
+    { label: 'Active POs', value: 'ACTIVE' },
+    { label: 'Has Offers', value: 'OFFERS' },
+    { label: 'Pending Fix.', value: 'FIX' },
+  ];
+
+  const filteredSuppliers = suppliers.filter(s => {
+    const matchSearch = !supplierSearch || s.name.toLowerCase().includes(supplierSearch.toLowerCase()) || s.region.toLowerCase().includes(supplierSearch.toLowerCase());
+    const matchFilter =
+      supplierFilter === 'ALL' ||
+      (supplierFilter === 'ACTIVE' && s.activePOs > 0) ||
+      (supplierFilter === 'OFFERS' && s.offers > 0) ||
+      (supplierFilter === 'FIX' && s.fixPending > 0);
+    return matchSearch && matchFilter;
+  });
+
+  const isUp = ice.change >= 0;
+  const maxKg = Math.max(...suppliers.map(s => s.lotsKg), 1);
+
+  function MiniBar({ value, max }) {
+    const pct = Math.round((value / max) * 100);
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ flex: 1, height: 5, borderRadius: 3, background: '#f0f0f0', overflow: 'hidden' }}>
+          <div style={{ width: pct + '%', height: '100%', background: 'var(--color-secondary)', borderRadius: 3 }}></div>
+        </div>
+        <span style={{ fontSize: 12, fontVariantNumeric: 'tabular-nums', color: '#374151', minWidth: 42, textAlign: 'right' }}>{value.toLocaleString()}</span>
+      </div>
+    );
+  }
+
+  function CountBadge({ value, warn }) {
+    const hasVal = value > 0;
+    const isWarn = warn && hasVal;
+    return (
+      <span style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        minWidth: 28, padding: '2px 8px', borderRadius: 12,
+        fontSize: 12, fontWeight: 600, fontVariantNumeric: 'tabular-nums',
+        background: !hasVal ? '#f5f5f5' : isWarn ? '#fff8e1' : '#e8f5e9',
+        color: !hasVal ? '#bdbdbd' : isWarn ? '#e65100' : '#2e7d32',
+      }}>{value}</span>
+    );
+  }
+
+  return (
+    <div className="content-wrapper">
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1>Sourcing Dashboard</h1>
+          <div style={{ fontSize: 12, color: 'var(--color-muted)', marginTop: 2 }}>Café del Monte Mill · May 4, 2026</div>
+        </div>
+        <div className="page-header-right">
+          <button className="btn btn-primary btn-sm" onClick={() => onNavigate('daily-offers')}>
+            <i className="bi bi-plus-lg"></i> Log Daily Offer
+          </button>
+          <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('receive-lot')}>
+            <i className="bi bi-box-seam"></i> Receive Lot
+          </button>
+        </div>
+      </div>
+
+      {/* KPI row */}
+      <div className="kpi-grid" style={{ marginBottom: 20 }}>
+        {kpis.map((k, i) => (
+          <div key={i} className="kpi-card" onClick={() => k.screen && onNavigate(k.screen)} style={{ cursor: k.screen ? 'pointer' : 'default', alignItems: 'flex-start', flexDirection: 'column', gap: 8, padding: '16px 18px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%' }}>
+              <div className={"kpi-icon " + k.cls} style={{ flexShrink: 0 }}><i className={"bi " + k.icon}></i></div>
+              <div className="kpi-label" style={{ fontWeight: 600, color: '#5a6c7d' }}>{k.label}</div>
+            </div>
+            <div className="kpi-value" style={{ fontSize: 32, lineHeight: 1 }}>{k.value}</div>
+            <div style={{ fontSize: 11, color: 'var(--color-muted)' }}>{k.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Main layout: left column (supplier table + bottom row) + right sidebar */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 16, alignItems: 'stretch' }}>
+
+        {/* Supplier overview table */}
+        <div className="card">
+          <div className="card-header-bar" style={{ gap: 10, flexWrap: 'wrap' }}>
+            <h2 style={{ display: 'flex', alignItems: 'center', gap: 7, whiteSpace: 'nowrap' }}>
+              <i className="bi bi-people" style={{ color: 'var(--color-secondary)' }}></i>
+              Supplier Overview
+            </h2>
+            <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginLeft: 'auto' }}>
+              <div className="filter-pills">
+                {supplierFilters.map(f => (
+                  <button key={f.value} className={"filter-pill" + (supplierFilter === f.value ? ' active' : '')}
+                    onClick={() => setSupplierFilter(f.value)} style={{ padding: '3px 10px', fontSize: 11 }}>{f.label}</button>
+                ))}
+              </div>
+              <div className="search-wrap">
+                <i className="bi bi-search"></i>
+                <input className="search-input" value={supplierSearch} onChange={e => setSupplierSearch(e.target.value)}
+                  placeholder="Search…" style={{ width: 148, fontSize: 12 }} />
+              </div>
+            </div>
+          </div>
+
+          <div style={{ overflowX: 'auto' }}>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th style={{ minWidth: 170 }}>Supplier</th>
+                  <th>Region</th>
+                  <th style={{ textAlign: 'center' }}>Active POs</th>
+                  <th style={{ minWidth: 160 }}>Lots Pending (KG)</th>
+                  <th style={{ textAlign: 'center' }}>Daily Offers</th>
+                  <th style={{ textAlign: 'center' }}>Pending Fix.</th>
+                  <th style={{ textAlign: 'center' }}>Delivery</th>
+                  <th>Last Activity</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredSuppliers.map((s, i) => (
+                  <tr key={i} className="clickable" onClick={() => onNavigate('po-list')}>
+                    <td>
+                      <div style={{ fontWeight: 600, color: 'var(--color-primary)', fontSize: 13 }}>{s.name}</div>
+                      <span style={{
+                        fontSize: 10, fontWeight: 600, padding: '1px 6px', borderRadius: 8, marginTop: 2, display: 'inline-block',
+                        background: s.type === 'Cooperative' ? '#e3f2fd' : '#f3e8ff',
+                        color: s.type === 'Cooperative' ? '#1565c0' : '#6b21a8',
+                      }}>{s.type}</span>
+                    </td>
+                    <td style={{ fontSize: 12, color: 'var(--color-muted)' }}>{s.region}</td>
+                    <td style={{ textAlign: 'center' }}><CountBadge value={s.activePOs} warn={false} /></td>
+                    <td style={{ minWidth: 160 }}>
+                      {s.lotsKg > 0
+                        ? <MiniBar value={s.lotsKg} max={maxKg} />
+                        : <span style={{ fontSize: 12, color: '#d1d5db' }}>—</span>}
+                    </td>
+                    <td style={{ textAlign: 'center' }}><CountBadge value={s.offers} warn={false} /></td>
+                    <td style={{ textAlign: 'center' }}><CountBadge value={s.fixPending} warn={true} /></td>
+                    <td style={{ textAlign: 'center' }}>
+                      <span className={"del-dot del-" + s.delStatus} style={{ display: 'inline-block' }}></span>
+                    </td>
+                    <td style={{ fontSize: 12, color: 'var(--color-muted)' }}>{s.lastActivity}</td>
+                    <td onClick={e => e.stopPropagation()}>
+                      <button className="btn btn-outline btn-sm" style={{ fontSize: 11, padding: '3px 10px' }}
+                        onClick={() => onNavigate('po-list')}>View</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr style={{ background: '#f8f9fa', borderTop: '2px solid var(--color-border)' }}>
+                  <td colSpan={2} style={{ padding: '9px 12px', fontSize: 12, fontWeight: 700, color: 'var(--color-primary)' }}>
+                    {filteredSuppliers.length} supplier{filteredSuppliers.length !== 1 ? 's' : ''}
+                  </td>
+                  <td style={{ textAlign: 'center', padding: '9px 12px', fontSize: 12, fontWeight: 700, color: 'var(--color-primary)' }}>
+                    {filteredSuppliers.reduce((a, s) => a + s.activePOs, 0)}
+                  </td>
+                  <td style={{ padding: '9px 12px', fontSize: 12, fontWeight: 700, color: 'var(--color-primary)', fontVariantNumeric: 'tabular-nums' }}>
+                    {filteredSuppliers.reduce((a, s) => a + s.lotsKg, 0).toLocaleString()} KG total
+                  </td>
+                  <td style={{ textAlign: 'center', padding: '9px 12px', fontSize: 12, fontWeight: 700, color: 'var(--color-primary)' }}>
+                    {filteredSuppliers.reduce((a, s) => a + s.offers, 0)}
+                  </td>
+                  <td style={{ textAlign: 'center', padding: '9px 12px', fontSize: 12, fontWeight: 700,
+                    color: filteredSuppliers.reduce((a, s) => a + s.fixPending, 0) > 0 ? '#e65100' : 'var(--color-primary)' }}>
+                    {filteredSuppliers.reduce((a, s) => a + s.fixPending, 0)}
+                  </td>
+                  <td colSpan={3}></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        {/* Right sidebar — stretches full height of grid row */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+
+          {/* ICE card — flex-grow to fill available space */}
+          <div className="card" style={{ background: 'var(--color-primary)', border: 'none', flex: '1 1 auto', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.55)', marginBottom: 8 }}>ICE C Futures — Jul 25</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                <span style={{ fontSize: 28, fontWeight: 700, fontVariantNumeric: 'tabular-nums', transition: 'color 0.4s',
+                  color: ice.flash === 'up' ? '#97be0d' : ice.flash === 'down' ? '#f1562a' : '#fff' }}>{ice.price.toFixed(2)}</span>
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>¢/lb</span>
+                <span style={{ fontSize: 13, fontWeight: 600, color: isUp ? '#97be0d' : '#f1562a' }}>{isUp ? '▲' : '▼'}{Math.abs(ice.change).toFixed(2)}</span>
+              </div>
+              <div style={{ marginTop: 10, fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>NY market hours: 9:00–14:30 EST</div>
+              <div style={{ marginTop: 3, fontSize: 11, color: '#97be0d', fontWeight: 500 }}>● Market Open</div>
+              <div style={{ flex: 1 }}></div>
+              <div style={{ marginTop: 14, fontSize: 11, color: 'rgba(255,255,255,0.4)', borderTop: '1px solid rgba(255,255,255,0.12)', paddingTop: 10 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <span>Open</span><span style={{ color: 'rgba(255,255,255,0.7)' }}>381.25</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <span>High</span><span style={{ color: '#97be0d' }}>384.10</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <span>Low</span><span style={{ color: '#f1562a' }}>380.50</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>Settle</span><span style={{ color: 'rgba(255,255,255,0.7)' }}>382.50</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick actions — flex-grow to fill space */}
+          <div className="card" style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column' }}>
+            <div className="card-header-bar"><h2>Quick Actions</h2></div>
+            <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
+              <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => onNavigate('daily-offers')}>
+                <i className="bi bi-plus-lg"></i> Log Daily Offer
+              </button>
+              <button className="btn btn-secondary" style={{ width: '100%' }} onClick={() => onNavigate('receive-lot')}>
+                <i className="bi bi-box-seam"></i> Receive Lot
+              </button>
+              <button className="btn btn-outline" style={{ width: '100%' }} onClick={() => onNavigate('po-list')}>
+                <i className="bi bi-file-earmark-plus"></i> Create PO
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom row: ICE history chart (50%) + Recent Activity (50%) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16 }}>
+
+        {/* ICE Futures Historical Chart */}
+        <div className="card">
+          <div className="card-header-bar" style={{ gap: 10 }}>
+            <h2 style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              <i className="bi bi-graph-up" style={{ color: 'var(--color-secondary)' }}></i>
+              ICE C Historical — Jul 25
+            </h2>
+            <IceRangeButtons /></div>
+          <div style={{ padding: '12px 16px 16px' }}>
+            <IceHistoryChart />
+          </div>
+        </div>
+
+        {/* Recent activity */}
+        <div className="card">
+          <div className="card-header-bar"><h2>Recent Activity</h2></div>
+          <div style={{ padding: '4px 0' }}>
+            {activity.map((a, i) => (
+              <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', padding: '9px 14px', borderBottom: i < activity.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: a.color, flexShrink: 0, marginTop: 5 }}></span>
+                <span style={{ flex: 1, fontSize: 12, color: '#374151', lineHeight: 1.4 }}>{a.msg}</span>
+                <span style={{ fontSize: 11, color: 'var(--color-muted)', whiteSpace: 'nowrap', marginTop: 1 }}>{a.time}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── DAILY OFFERS ──────────────────────────────────────────────────────────
+function DailyOffersScreen({ onNavigate }) {
+  const [filter, setFilter] = React.useState('ALL');
+  const [search, setSearch] = React.useState('');
+  const [selected, setSelected] = React.useState([]);
+
+  const offers = [
+    { id: 'DO-2025-0081', date: 'May 3', supplier: 'Finca La Palma',     variety: 'Bourbon',  type: 'Washed',  qty: 480, diff: '+12.5', certs: ['RFA', 'Organic'], status: 'ACTIVE' },
+    { id: 'DO-2025-0080', date: 'May 3', supplier: 'Coop San Marcos',    variety: 'Caturra',  type: 'Natural', qty: 600, diff: '+8.0',  certs: ['FTO'],            status: 'ACTIVE' },
+    { id: 'DO-2025-0079', date: 'May 2', supplier: 'El Paraíso Estate',  variety: 'Gesha',    type: 'Honey',   qty: 240, diff: '+22.0', certs: ['SHB','Organic'],  status: 'ACTIVE' },
+    { id: 'DO-2025-0078', date: 'May 2', supplier: 'Finca Las Nubes',    variety: 'Pacamara', type: 'Washed',  qty: 360, diff: '+15.0', certs: ['RFA'],            status: 'CONVERTED' },
+    { id: 'DO-2025-0077', date: 'May 1', supplier: 'Coop La Unión',      variety: 'Typica',   type: 'Natural', qty: 720, diff: '+6.5',  certs: ['FTO','Organic'],  status: 'CONVERTED' },
+    { id: 'DO-2025-0076', date: 'May 1', supplier: 'Finca El Roble',     variety: 'Catuai',   type: 'Washed',  qty: 300, diff: '+4.0',  certs: [],                 status: 'DISMISSED' },
+    { id: 'DO-2025-0075', date: 'Apr 30', supplier: 'Hacienda La Gracia', variety: 'Bourbon', type: 'Honey',   qty: 540, diff: '+10.5', certs: ['SHB'],            status: 'DISMISSED' },
+  ];
+
+  const filters = [
+    { label: 'All', value: 'ALL' }, { label: 'Active', value: 'ACTIVE' },
+    { label: 'Converted', value: 'CONVERTED' }, { label: 'Dismissed', value: 'DISMISSED' },
+  ];
+
+  const filtered = offers.filter(o =>
+    (filter === 'ALL' || o.status === filter) &&
+    (!search || o.supplier.toLowerCase().includes(search.toLowerCase()) || o.variety.toLowerCase().includes(search.toLowerCase()))
+  );
+
+  const toggleSel = id => setSelected(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]);
+
+  return (
+    <div className="content-wrapper">
+      <div className="page-header">
+        <div className="page-header-left">
+          <div className="breadcrumb"><span>Sourcing</span><span>/</span><span>Daily Offers</span></div>
+          <h1>Daily Offers</h1>
+        </div>
+        <div className="page-header-right">
+          {selected.length > 0 && (
+            <button className="btn btn-accent btn-sm" onClick={() => setSelected([])}>
+              Dismiss {selected.length} selected
+            </button>
+          )}
+          <button className="btn btn-primary btn-sm"><i className="bi bi-plus-lg"></i> Log Offer</button>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="card-header-bar">
+          <div className="filter-pills">
+            {filters.map(f => (
+              <button key={f.value} className={`filter-pill${filter === f.value ? ' active' : ''}`} onClick={() => setFilter(f.value)}>{f.label}</button>
+            ))}
+          </div>
+          <div style={{ flex: 1 }}></div>
+          <div className="search-wrap">
+            <i className="bi bi-search"></i>
+            <input className="search-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search supplier, variety…" />
+          </div>
+          <button className="btn btn-outline btn-sm"><i className="bi bi-funnel"></i> Filter</button>
+        </div>
+
+        <div style={{ overflowX: 'auto' }}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th style={{ width: 36 }}></th>
+                <th>ID</th><th>Date</th><th>Supplier</th><th>Variety / Type</th>
+                <th>Qty (KG)</th><th>Differential</th><th>Certifications</th>
+                <th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((o, i) => (
+                <tr key={o.id} style={{ background: selected.includes(o.id) ? '#eff6ff' : undefined }}>
+                  <td><input type="checkbox" checked={selected.includes(o.id)} onChange={() => toggleSel(o.id)} style={{ accentColor: 'var(--color-primary)', cursor: 'pointer' }} /></td>
+                  <td style={{ fontVariantNumeric: 'tabular-nums', fontSize: 11, color: 'var(--color-muted)' }}>{o.id}</td>
+                  <td>{o.date}</td>
+                  <td style={{ fontWeight: 600, color: 'var(--color-primary)' }}>{o.supplier}</td>
+                  <td>
+                    {o.variety}
+                    <span style={{ marginLeft: 6, fontSize: 11, color: 'var(--color-muted)', background: '#f3f4f6', padding: '2px 7px', borderRadius: 10 }}>{o.type}</span>
+                  </td>
+                  <td style={{ fontVariantNumeric: 'tabular-nums' }}>{o.qty.toLocaleString()}</td>
+                  <td style={{ fontWeight: 700, color: '#27ae60', fontVariantNumeric: 'tabular-nums' }}>{o.diff} ¢/lb</td>
+                  <td>
+                    {o.certs.length === 0
+                      ? <span style={{ color: '#d1d5db' }}>—</span>
+                      : o.certs.map(c => <span key={c} style={{ display: 'inline-block', marginRight: 4, padding: '1px 7px', borderRadius: 10, fontSize: 11, fontWeight: 600, background: 'rgba(52,73,101,0.08)', color: 'var(--color-primary)', border: '1px solid rgba(52,73,101,0.15)' }}>{c}</span>)
+                    }
+                  </td>
+                  <td><StatusPill status={o.status} /></td>
+                  <td>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      {o.status === 'ACTIVE' && (
+                        <><button className="btn btn-primary btn-sm" onClick={() => onNavigate('po-list')}>Convert → PO</button>
+                          <button className="btn btn-outline btn-sm">Edit</button></>
+                      )}
+                      {o.status !== 'ACTIVE' && <button className="btn btn-outline btn-sm">View</button>}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div style={{ padding: '10px 16px', borderTop: '1px solid #f1f1f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 12, color: 'var(--color-muted)' }}>Showing {filtered.length} of {offers.length} offers</span>
+          <div className="pagination">
+            <button>← Prev</button>
+            <span className="pg-info">Page 1 of 1</span>
+            <button>Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── PURCHASE ORDERS LIST ──────────────────────────────────────────────────
+function POListScreen({ onNavigate }) {
+  const [filter, setFilter] = React.useState('ALL');
+  const [search, setSearch] = React.useState('');
+
+  const pos = [
+    { id: 'PO-2025-0092', supplier: 'El Paraíso Estate',  variety: 'Gesha Washed',    qty: 1200, diff: '+22.0', fixStatus: 'PENDING',    qcStatus: 'PASS',    delivery: '2025-05-10', delCol: 'green', status: 'CONFIRMED' },
+    { id: 'PO-2025-0091', supplier: 'Finca La Palma',     variety: 'Bourbon Washed',  qty: 2400, diff: '+12.5', fixStatus: 'IN_PROGRESS',qcStatus: 'PENDING', delivery: '2025-05-08', delCol: 'amber', status: 'CONFIRMED' },
+    { id: 'PO-2025-0090', supplier: 'Coop San Marcos',    variety: 'Caturra Natural', qty: 3600, diff: '+8.0',  fixStatus: 'APPROVED',   qcStatus: 'PASS',    delivery: '2025-05-06', delCol: 'red',   status: 'PARTIALLY_RECEIVED' },
+    { id: 'PO-2025-0089', supplier: 'Finca Las Nubes',    variety: 'Pacamara Honey',  qty: 960,  diff: '+15.0', fixStatus: 'APPROVED',   qcStatus: 'PASS',    delivery: '2025-05-01', delCol: 'green', status: 'FULLY_RECEIVED' },
+    { id: 'PO-2025-0088', supplier: 'Hacienda La Gracia', variety: 'Bourbon Honey',   qty: 1800, diff: '+10.5', fixStatus: 'PENDING',    qcStatus: 'PENDING', delivery: '2025-05-15', delCol: 'green', status: 'DRAFT' },
+    { id: 'PO-2025-0087', supplier: 'Finca El Roble',     variety: 'Catuai Washed',   qty: 2100, diff: '+4.0',  fixStatus: 'CANCELLED',  qcStatus: 'REJECTED',delivery: '2025-04-28', delCol: 'red',   status: 'CANCELLED' },
+  ];
+
+  const filters = [
+    { label: 'All', value: 'ALL' }, { label: 'Draft', value: 'DRAFT' },
+    { label: 'Confirmed', value: 'CONFIRMED' }, { label: 'In Delivery', value: 'PARTIALLY_RECEIVED' },
+    { label: 'Completed', value: 'FULLY_RECEIVED' }, { label: 'Cancelled', value: 'CANCELLED' },
+  ];
+
+  const filtered = pos.filter(p =>
+    (filter === 'ALL' || p.status === filter) &&
+    (!search || p.supplier.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase()))
+  );
+
+  return (
+    <div className="content-wrapper">
+      <div className="page-header">
+        <div className="page-header-left">
+          <div className="breadcrumb"><span>Sourcing</span><span>/</span><span>Purchase Orders</span></div>
+          <h1>Purchase Orders</h1>
+        </div>
+        <div className="page-header-right">
+          <button className="btn btn-primary btn-sm"><i className="bi bi-plus-lg"></i> New PO</button>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="card-header-bar">
+          <div className="filter-pills">
+            {filters.map(f => <button key={f.value} className={`filter-pill${filter === f.value ? ' active' : ''}`} onClick={() => setFilter(f.value)}>{f.label}</button>)}
+          </div>
+          <div style={{ flex: 1 }}></div>
+          <div className="search-wrap">
+            <i className="bi bi-search"></i>
+            <input className="search-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search PO or supplier…" />
+          </div>
+          <button className="btn btn-outline btn-sm"><i className="bi bi-funnel"></i> Filter</button>
+          <button className="btn btn-outline btn-sm"><i className="bi bi-sort-down"></i> Sort</button>
+        </div>
+
+        <div style={{ overflowX: 'auto' }}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>PO Number</th><th>Supplier</th><th>Coffee</th><th>Qty (KG)</th>
+                <th>Differential</th><th>Fixation</th><th>QC Gate</th>
+                <th>Est. Delivery</th><th>Status</th><th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((po, i) => (
+                <tr key={po.id} className="clickable" onClick={() => onNavigate('po-detail', po.id)}>
+                  <td style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600, color: 'var(--color-secondary)', fontSize: 12 }}>{po.id}</td>
+                  <td style={{ fontWeight: 600, color: 'var(--color-primary)' }}>{po.supplier}</td>
+                  <td>{po.variety}</td>
+                  <td style={{ fontVariantNumeric: 'tabular-nums' }}>{po.qty.toLocaleString()}</td>
+                  <td style={{ fontWeight: 700, color: '#27ae60', fontVariantNumeric: 'tabular-nums' }}>{po.diff} ¢/lb</td>
+                  <td><StatusPill status={po.fixStatus} /></td>
+                  <td><StatusPill status={po.qcStatus} /></td>
+                  <td>
+                    <div style={{ display: 'flex', gap: 7, alignItems: 'center' }}>
+                      <span className={`del-dot del-${po.delCol}`}></span>
+                      <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12 }}>{po.delivery}</span>
+                    </div>
+                  </td>
+                  <td><StatusPill status={po.status} /></td>
+                  <td onClick={e => e.stopPropagation()}>
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                      <button className="btn btn-outline btn-sm" onClick={() => onNavigate('po-detail', po.id)}>View</button>
+                      <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-muted)', fontSize: 18, padding: '0 4px' }}>⋮</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div style={{ padding: '10px 16px', borderTop: '1px solid #f1f1f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 12, color: 'var(--color-muted)' }}>Showing {filtered.length} of {pos.length} purchase orders</span>
+          <div className="pagination">
+            <button>← Prev</button>
+            <span className="pg-info">Page 1 of 1</span>
+            <button>Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── PO DETAIL ─────────────────────────────────────────────────────────────
+function PODetailScreen({ poId, onNavigate }) {
+  const [tab, setTab] = React.useState('overview');
+  const [showAudit, setShowAudit] = React.useState(false);
+  const [icePrice, setIcePrice] = React.useState(382.50);
+
+  React.useEffect(() => {
+    const h = e => setIcePrice(e.detail);
+    window.addEventListener('ice-update', h);
+    return () => window.removeEventListener('ice-update', h);
+  }, []);
+
+  const po = {
+    id: poId || 'PO-2025-0092', supplier: 'El Paraíso Estate', status: 'CONFIRMED',
+    variety: 'Gesha', type: 'Washed', qty: 1200, diff: 22.0,
+    futures: 'ICE Jul-25', delivery: '2025-05-10', qcStatus: 'PASS',
+    certs: ['Organic', 'SHB'],
+  };
+  const allIn = (icePrice + po.diff).toFixed(2);
+
+  const gates = [
+    { label: 'Contract signed & uploaded', done: true },
+    { label: 'Supplier banking verified', done: true },
+    { label: 'Receiving QC passed', done: true },
+    { label: 'Min. volume threshold met (≥ 1 lot)', done: true },
+    { label: 'Invoice issued (≥ 1 linked)', done: false },
+    { label: 'NY market hours open', done: false },
+  ];
+  const gatesOk = gates.every(g => g.done);
+
+  const lots = [
+    { id: 'L-2025-0441', date: 'May 3', weight: 312, qc: 'PASS', stage: 'Milling' },
+    { id: 'L-2025-0440', date: 'Apr 29', weight: 288, qc: 'PASS', stage: 'Warehoused' },
+  ];
+
+  const fixHistory = [
+    { id: 'FIX-2025-0031', type: 'GTC', level: '385.50', status: 'EXPIRED',  vol: 0, price: null, ts: 'Apr 28 14:02' },
+    { id: 'FIX-2025-0029', type: 'Market', level: '—',  status: 'APPROVED', vol: 600, price: '381.25', ts: 'Apr 22 09:18' },
+  ];
+
+  const tabs = ['overview', 'fixation', 'lots', 'documents'];
+
+  return (
+    <div className="content-wrapper">
+      <div className="page-header">
+        <div className="page-header-left">
+          <div className="breadcrumb">
+            <a onClick={() => onNavigate('po-list')}>Purchase Orders</a>
+            <span>/</span><span>{po.id}</span>
+          </div>
+          <h1 style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {po.id} <StatusPill status={po.status} />
+          </h1>
+        </div>
+        <div className="page-header-right">
+          <button className="btn btn-outline btn-sm"><i className="bi bi-printer"></i> Print</button>
+          <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('receive-lot')}>
+            <i className="bi bi-box-seam"></i> Receive Lot
+          </button>
+        </div>
+      </div>
+
+      {/* Summary strip */}
+      <div className="summary-strip">
+        {[
+          { label: 'Supplier', val: po.supplier },
+          { label: 'Coffee', val: `${po.variety} ${po.type}` },
+          { label: 'Volume', val: `${po.qty.toLocaleString()} KG` },
+          { label: 'Buying Diff.', val: `+${po.diff} ¢/lb` },
+          { label: 'Futures', val: po.futures },
+          { label: 'Est. Delivery', val: po.delivery },
+        ].map((item, i) => (
+          <div key={i} className="summary-strip-item">
+            <span className="summary-strip-label">{item.label}</span>
+            <span className="summary-strip-value">{item.val}</span>
+          </div>
+        ))}
+        <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+          <div className="summary-strip-label">All-In Price Today</div>
+          <div style={{ fontSize: 22, fontWeight: 700, fontVariantNumeric: 'tabular-nums', marginTop: 2 }}>{allIn} ¢/lb</div>
+          <div style={{ fontSize: 10, opacity: 0.5, marginTop: 2 }}>{icePrice.toFixed(2)} + {po.diff}</div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="tabs">
+        {tabs.map(t => (
+          <button key={t} className={`tab-btn${tab === t ? ' active' : ''}`} onClick={() => setTab(t)}>
+            {t.charAt(0).toUpperCase() + t.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'overview' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Contract terms */}
+            <div className="card">
+              <div className="card-header-bar"><h2>Contract Terms</h2></div>
+              <div style={{ padding: '16px 20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 24px' }}>
+                {[
+                  { label: 'Buying Differential', val: `+${po.diff} ¢/lb` },
+                  { label: 'Futures Contract',    val: po.futures },
+                  { label: 'Expected Delivery',   val: po.delivery },
+                  { label: 'Quality Spec',        val: 'SHB EP, SC 15+' },
+                  { label: 'Certifications',      val: po.certs.join(', ') },
+                  { label: 'QC Gate Status',      val: <StatusPill status={po.qcStatus} /> },
+                ].map((row, i) => (
+                  <div key={i} style={{ borderBottom: '1px solid #f3f4f6', paddingBottom: 10 }}>
+                    <div style={{ fontSize: 11, color: 'var(--color-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 3 }}>{row.label}</div>
+                    <div style={{ fontSize: 13, color: '#111827', fontWeight: 500 }}>{row.val}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Linked lots */}
+            <div className="card">
+              <div className="card-header-bar">
+                <h2>Linked Lots ({lots.length})</h2>
+                <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('receive-lot')}><i className="bi bi-plus-lg"></i> Receive Lot</button>
+              </div>
+              <div style={{ overflowX: 'auto' }}>
+                <table className="table">
+                  <thead><tr><th>Lot ID</th><th>Date</th><th>Weight (KG)</th><th>QC</th><th>Stage</th></tr></thead>
+                  <tbody>
+                    {lots.map((l, i) => (
+                      <tr key={l.id}>
+                        <td style={{ fontWeight: 600, color: 'var(--color-secondary)', fontSize: 12 }}>{l.id}</td>
+                        <td>{l.date}</td>
+                        <td style={{ fontVariantNumeric: 'tabular-nums' }}>{l.weight}</td>
+                        <td><StatusPill status={l.qc} /></td>
+                        <td>{l.stage}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Gate + fixation summary */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div className="card">
+              <div className="card-header-bar"><h2>Fixation Gate</h2></div>
+              <div style={{ padding: '14px 16px' }}>
+                {gates.map((g, i) => (
+                  <div key={i} className="gate-item">
+                    <i className={`bi ${g.done ? 'bi-check-circle-fill gate-check done' : 'bi-circle gate-check todo'}`}></i>
+                    <span className={`gate-label ${g.done ? 'done' : 'todo'}`}>{g.label}</span>
+                  </div>
+                ))}
+                <div style={{ marginTop: 14 }}>
+                  <button className="btn btn-primary btn-sm" disabled={!gatesOk} style={{ width: '100%' }}>
+                    <i className="bi bi-lightning"></i> Request Fixation
+                  </button>
+                  {!gatesOk && <div style={{ fontSize: 11, color: 'var(--color-muted)', marginTop: 6, textAlign: 'center' }}>Complete all gate conditions to unlock</div>}
+                </div>
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="card-header-bar"><h2>Fixation Summary</h2></div>
+              <div style={{ padding: '14px 16px' }}>
+                {[
+                  { label: 'Total Fixed', val: '600 KG' },
+                  { label: 'Unfixed Balance', val: '600 KG' },
+                  { label: 'Weighted Avg. Price', val: '381.25 ¢/lb' },
+                  { label: 'Fixed %', val: '50%' },
+                ].map((row, i) => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderBottom: '1px solid #f3f4f6', fontSize: 13 }}>
+                    <span style={{ color: 'var(--color-muted)' }}>{row.label}</span>
+                    <span style={{ fontWeight: 700, color: 'var(--color-primary)', fontVariantNumeric: 'tabular-nums' }}>{row.val}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {tab === 'fixation' && (
+        <div className="card">
+          <div className="card-header-bar"><h2>Fixation History</h2></div>
+          <div style={{ overflowX: 'auto' }}>
+            <table className="table">
+              <thead><tr><th>Fix ID</th><th>Order Type</th><th>Level</th><th>Status</th><th>Vol Fixed (KG)</th><th>Price (¢/lb)</th><th>Timestamp</th></tr></thead>
+              <tbody>
+                {fixHistory.map((f, i) => (
+                  <tr key={f.id}>
+                    <td style={{ fontWeight: 600, color: 'var(--color-secondary)', fontSize: 12 }}>{f.id}</td>
+                    <td>{f.type}</td>
+                    <td style={{ fontVariantNumeric: 'tabular-nums' }}>{f.level}</td>
+                    <td><StatusPill status={f.status} /></td>
+                    <td style={{ fontVariantNumeric: 'tabular-nums' }}>{f.vol > 0 ? f.vol : '—'}</td>
+                    <td style={{ fontVariantNumeric: 'tabular-nums' }}>{f.price || '—'}</td>
+                    <td style={{ fontSize: 12, color: 'var(--color-muted)' }}>{f.ts}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {tab === 'lots' && (
+        <div className="card">
+          <div className="card-header-bar">
+            <h2>Lots ({lots.length})</h2>
+            <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('receive-lot')}><i className="bi bi-plus-lg"></i> Receive Lot</button>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table className="table">
+              <thead><tr><th>Lot ID</th><th>Received</th><th>Weight (KG)</th><th>QC</th><th>Processing Stage</th><th></th></tr></thead>
+              <tbody>
+                {lots.map(l => (
+                  <tr key={l.id}>
+                    <td style={{ fontWeight: 600, color: 'var(--color-secondary)', fontSize: 12 }}>{l.id}</td>
+                    <td>{l.date}</td>
+                    <td style={{ fontVariantNumeric: 'tabular-nums' }}>{l.weight}</td>
+                    <td><StatusPill status={l.qc} /></td>
+                    <td>{l.stage}</td>
+                    <td><button className="btn btn-outline btn-sm">View Lot</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {tab === 'documents' && (
+        <div className="card">
+          <div className="card-header-bar">
+            <h2>Documents</h2>
+            <button className="btn btn-outline-primary btn-sm"><i className="bi bi-upload"></i> Upload</button>
+          </div>
+          <div style={{ padding: '4px 0' }}>
+            {[
+              { name: 'Signed Contract — El Paraíso Estate.pdf', type: 'Contract', date: 'Apr 20', size: '284 KB' },
+              { name: 'Quality Spec Sheet.pdf', type: 'QC Spec', date: 'Apr 20', size: '112 KB' },
+              { name: 'Receiving Report L-2025-0441.pdf', type: 'Receiving', date: 'May 3', size: '64 KB' },
+            ].map((d, i) => (
+              <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'center', padding: '12px 20px', borderBottom: '1px solid #f3f4f6' }}>
+                <i className="bi bi-file-earmark-pdf" style={{ fontSize: 22, color: 'var(--color-accent)' }}></i>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{d.name}</div>
+                  <div style={{ fontSize: 11, color: 'var(--color-muted)', marginTop: 2 }}>{d.type} · {d.date} · {d.size}</div>
+                </div>
+                <button className="btn btn-outline btn-sm"><i className="bi bi-download"></i> Download</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Audit trail */}
+      <div style={{ marginTop: 20 }}>
+        <button onClick={() => setShowAudit(v => !v)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: 'var(--color-muted)', display: 'flex', gap: 6, alignItems: 'center' }}>
+          <i className={`bi bi-chevron-${showAudit ? 'down' : 'right'}`} style={{ fontSize: 11 }}></i>
+          Audit Trail ({showAudit ? 'hide' : 'show'})
+        </button>
+        {showAudit && (
+          <div className="card" style={{ marginTop: 10, background: 'var(--color-bg)' }}>
+            <div style={{ padding: '14px 20px' }}>
+              {[
+                { ts: 'May 3, 09:42',  user: 'M. Santos',  action: 'Lot L-2025-0441 received and linked to PO' },
+                { ts: 'Apr 29, 14:15', user: 'M. Santos',  action: 'Lot L-2025-0440 received and linked to PO' },
+                { ts: 'Apr 28, 14:02', user: 'M. Santos',  action: 'Fixation order FIX-2025-0031 submitted (GTC @ 385.50)' },
+                { ts: 'Apr 22, 09:18', user: 'M. Santos',  action: 'Fixation FIX-2025-0029 filled (Market @ 381.25), 600 KG' },
+                { ts: 'Apr 20, 11:30', user: 'A. Morales', action: 'PO confirmed and contract uploaded' },
+              ].map((e, i) => (
+                <div key={i} className="audit-row">
+                  <span className="audit-ts">{e.ts}</span>
+                  <span className="audit-user">{e.user}</span>
+                  <span className="audit-msg">{e.action}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── RECEIVE LOT ───────────────────────────────────────────────────────────
+function ReceiveLotScreen({ onNavigate }) {
+  const [form, setForm] = React.useState({ truckWeight: '', millWeight: '', humidity: '', waterActivity: '', condition: 'GOOD', variety: 'Gesha', type: 'Washed', bagType: 'GrainPro', marking: 'EF-GL-2025', moistureTarget: '11.5', notes: '' });
+  const [photos, setPhotos] = React.useState([]);
+  const [submitted, setSubmitted] = React.useState(false);
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const truckW = parseFloat(form.truckWeight) || 0;
+  const millW  = parseFloat(form.millWeight)  || 0;
+  const disc   = truckW && millW ? Math.abs((truckW - millW) / truckW * 100) : null;
+  const hasFlag = disc !== null && disc > 0.5;
+
+  if (submitted) {
+    return (
+      <div className="content-wrapper">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 0', gap: 16 }}>
+          <div style={{ width: 68, height: 68, borderRadius: '50%', background: '#e8f5e9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <i className="bi bi-check-lg" style={{ fontSize: 32, color: '#27ae60' }}></i>
+          </div>
+          <h2 style={{ fontSize: 20, fontWeight: 600, color: '#2c3e50' }}>Lot Received Successfully</h2>
+          <p style={{ fontSize: 14, color: 'var(--color-muted)' }}>Lot <strong>L-2025-0442</strong> recorded and linked to PO-2025-0092.</p>
+          {hasFlag && (
+            <div className="alert-box alert-warn" style={{ maxWidth: 420, textAlign: 'center' }}>
+              <i className="bi bi-exclamation-triangle-fill"></i>
+              Weight discrepancy of {disc.toFixed(2)}% was flagged. Review before processing.
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
+            <button className="btn btn-primary" onClick={() => onNavigate('po-detail')}>View PO</button>
+            <button className="btn btn-outline" onClick={() => { setSubmitted(false); setForm(f => ({ ...f, truckWeight: '', millWeight: '', humidity: '', waterActivity: '', notes: '' })); }}>Receive Another</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="content-wrapper">
+      <div className="page-header">
+        <div className="page-header-left">
+          <div className="breadcrumb"><a onClick={() => onNavigate('po-detail')}>PO-2025-0092</a><span>/</span><span>Receive Lot</span></div>
+          <h1>Receive Lot</h1>
+        </div>
+        <div className="page-header-right">
+          <button className="btn btn-outline btn-sm">Save Draft</button>
+          <button className="btn btn-primary btn-sm" onClick={() => setSubmitted(true)}>
+            <i className="bi bi-check-lg"></i> Submit Receipt
+          </button>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+          {/* PO Reference */}
+          <div className="card">
+            <div className="card-header-bar"><h2>PO Reference</h2></div>
+            <div style={{ padding: '16px 20px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
+              {[
+                { label: 'Purchase Order', val: 'PO-2025-0092' },
+                { label: 'Supplier', val: 'El Paraíso Estate' },
+                { label: 'Coffee', val: 'Gesha Washed' },
+              ].map((f, i) => (
+                <div key={i}>
+                  <label className="form-label">{f.label}</label>
+                  <input className="form-control" value={f.val} readOnly />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Weights */}
+          <div className="card">
+            <div className="card-header-bar"><h2>Weight Entry</h2></div>
+            <div style={{ padding: '16px 20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: 14, alignItems: 'end' }}>
+                <div>
+                  <label className="form-label">Truck Weight (KG)</label>
+                  <input type="number" className="form-control" value={form.truckWeight} onChange={e => set('truckWeight', e.target.value)} placeholder="e.g. 315.0" style={{ fontVariantNumeric: 'tabular-nums' }} />
+                </div>
+                <div>
+                  <label className="form-label">Mill Weight (KG)</label>
+                  <input type="number" className="form-control" value={form.millWeight} onChange={e => set('millWeight', e.target.value)} placeholder="e.g. 312.0" style={{ fontVariantNumeric: 'tabular-nums' }} />
+                </div>
+                <div className={`disc-box${disc === null ? ' neutral' : hasFlag ? ' warn' : ' ok'}`} style={{ minWidth: 110 }}>
+                  <div className="disc-label">Discrepancy</div>
+                  <div className="disc-value" style={{ color: hasFlag ? '#92400e' : disc !== null ? '#27ae60' : '#9ca3af' }}>
+                    {disc !== null ? `${disc.toFixed(2)}%` : '—'}
+                  </div>
+                </div>
+              </div>
+              {hasFlag && (
+                <div className="alert-box alert-warn" style={{ marginTop: 12 }}>
+                  <i className="bi bi-exclamation-triangle-fill"></i>
+                  Weight discrepancy exceeds 0.5% threshold. This will be flagged for supervisor review.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Quality on Arrival */}
+          <div className="card">
+            <div className="card-header-bar"><h2>Quality on Arrival</h2></div>
+            <div style={{ padding: '16px 20px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
+              <div>
+                <label className="form-label">Humidity (%)</label>
+                <input type="number" className="form-control" value={form.humidity} onChange={e => set('humidity', e.target.value)} placeholder="e.g. 12.5" step="0.1" />
+              </div>
+              <div>
+                <label className="form-label">Water Activity (Aw)</label>
+                <input type="number" className="form-control" value={form.waterActivity} onChange={e => set('waterActivity', e.target.value)} placeholder="e.g. 0.62" step="0.01" />
+              </div>
+              <div>
+                <label className="form-label">Condition</label>
+                <select className="form-control" value={form.condition} onChange={e => set('condition', e.target.value)}>
+                  {['GOOD','FAIR','DAMAGED','REJECTED'].map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="form-label">Variety Confirmation</label>
+                <input className="form-control" value={form.variety} onChange={e => set('variety', e.target.value)} />
+              </div>
+              <div>
+                <label className="form-label">Processing Type</label>
+                <input className="form-control" value={form.type} onChange={e => set('type', e.target.value)} />
+              </div>
+            </div>
+          </div>
+
+          {/* Notes */}
+          <div className="card">
+            <div className="card-header-bar"><h2>Receiving Notes</h2></div>
+            <div style={{ padding: '16px 20px' }}>
+              <textarea
+                className="form-control"
+                value={form.notes}
+                onChange={e => set('notes', e.target.value)}
+                placeholder={hasFlag ? 'Required: explain weight discrepancy…' : 'Optional notes about this delivery…'}
+                rows={4}
+                style={{ resize: 'vertical', lineHeight: 1.5, borderColor: hasFlag && !form.notes ? '#f1562a' : undefined }}
+              />
+              {hasFlag && !form.notes && <div style={{ fontSize: 11, color: 'var(--color-accent)', marginTop: 4 }}>Notes required when discrepancy exceeds threshold.</div>}
+            </div>
+          </div>
+        </div>
+
+        {/* Right column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div className="card">
+            <div className="card-header-bar"><h2>Processing Instructions</h2></div>
+            <div style={{ padding: '16px' }}>
+              {[
+                { label: 'Bag Type',           key: 'bagType',         val: form.bagType },
+                { label: 'Lot Marking',        key: 'marking',         val: form.marking },
+                { label: 'Moisture Target (%)', key: 'moistureTarget', val: form.moistureTarget },
+              ].map(r => (
+                <div key={r.key} style={{ marginBottom: 12 }}>
+                  <label className="form-label">{r.label}</label>
+                  <input className="form-control" value={r.val} onChange={e => set(r.key, e.target.value)} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-header-bar"><h2>Photos</h2></div>
+            <div style={{ padding: '16px' }}>
+              <div className="photo-zone" onClick={() => setPhotos(p => [...p, `Photo ${p.length + 1}`])}>
+                <i className="bi bi-camera" style={{ fontSize: 28, color: 'var(--color-muted)', display: 'block', marginBottom: 8 }}></i>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Tap to add photos</div>
+                <div style={{ fontSize: 11, color: 'var(--color-muted)', marginTop: 4 }}>JPG, PNG · Max 10 MB</div>
+              </div>
+              {photos.length > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
+                  {photos.map((p, i) => (
+                    <div key={i} style={{ width: 56, height: 56, borderRadius: 6, background: 'var(--color-bg)', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                      <i className="bi bi-image" style={{ fontSize: 20, color: 'var(--color-muted)' }}></i>
+                      <button onClick={() => setPhotos(prev => prev.filter((_,j) => j !== i))} style={{ position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: '50%', background: 'var(--color-accent)', border: 'none', color: '#fff', fontSize: 10, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="alert-box alert-info">
+            <i className="bi bi-info-circle-fill"></i>
+            <div>Submitting will create a new lot record and notify the QC team. <strong>This action cannot be undone.</strong></div>
+          </div>
+
+          <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => setSubmitted(true)}>
+            <i className="bi bi-check-lg"></i> Submit Receipt
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── PLACEHOLDER ───────────────────────────────────────────────────────────
+function PlaceholderScreen({ title, onNavigate }) {
+  return (
+    <div className="content-wrapper">
+      <div className="placeholder-screen">
+        <i className="bi bi-layout-text-sidebar" style={{ fontSize: 48, color: '#d1d5db' }}></i>
+        <h2>{title}</h2>
+        <p style={{ fontSize: 13 }}>This screen is not included in the core prototype.</p>
+        <button className="btn btn-outline" onClick={() => onNavigate('dashboard')}><i className="bi bi-house"></i> Back to Dashboard</button>
+      </div>
+    </div>
+  );
+}
+
+// ── TWEAKS PANEL ──────────────────────────────────────────────────────────
+function TweaksPanel({ visible, onClose, children }) {
+  if (!visible) return null;
+  return (
+    <div className="twk-panel visible" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <div className="twk-hd">
+        <b>Tweaks</b>
+        <button className="twk-x" onClick={onClose}>✕</button>
+      </div>
+      <div className="twk-body">{children}</div>
+    </div>
+  );
+}
+
+// ── ROOT APP ──────────────────────────────────────────────────────────────
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "sidebarCollapsed": false,
+  "density": "comfortable"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweak, tweaksVisible, setTweaksVisible] = useTweaks(TWEAK_DEFAULTS);
+  const [screen, setScreen] = React.useState('dashboard');
+  const [poId, setPoId]     = React.useState(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(TWEAK_DEFAULTS.sidebarCollapsed);
+  const ice = useICEPrice();
+
+  const navigate = (s, id) => { setScreen(s); if (id) setPoId(id); };
+
+  const renderScreen = () => {
+    switch (screen) {
+      case 'dashboard':    return <DashboardScreen onNavigate={navigate} ice={ice} />;
+      case 'daily-offers': return <DailyOffersScreen onNavigate={navigate} />;
+      case 'po-list':      return <POListScreen onNavigate={navigate} />;
+      case 'po-detail':    return <PODetailScreen poId={poId} onNavigate={navigate} />;
+      case 'receive-lot':  return <ReceiveLotScreen onNavigate={navigate} />;
+      default:             return <PlaceholderScreen title={screen.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} onNavigate={navigate} />;
+    }
+  };
+
+  return (
+    <>
+      <Header ice={ice} />
+      <Sidebar active={screen} onNavigate={navigate} collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(v => !v)} />
+      <main className={`main-content${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+        {renderScreen()}
+      </main>
+
+      <TweaksPanel visible={tweaksVisible} onClose={() => { setTweaksVisible(false); window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*'); }}>
+        <div className="twk-sect">Navigation</div>
+        <div className="twk-row twk-row-h">
+          <span className="twk-lbl">Collapse Sidebar</span>
+          <button className="twk-toggle" data-on={sidebarCollapsed ? '1' : '0'} onClick={() => { setSidebarCollapsed(v => !v); setTweak('sidebarCollapsed', !sidebarCollapsed); }}>
+            <i></i>
+          </button>
+        </div>
+        <div className="twk-sect">Go to Screen</div>
+        <select className="twk-field" value={screen} onChange={e => navigate(e.target.value)}>
+          <option value="dashboard">Dashboard</option>
+          <option value="daily-offers">Daily Offers</option>
+          <option value="po-list">Purchase Orders</option>
+          <option value="po-detail">PO Detail</option>
+          <option value="receive-lot">Receive Lot</option>
+        </select>
+        <div className="twk-sect">ICE Ticker</div>
+        <button className="twk-btn" onClick={() => window.dispatchEvent(new CustomEvent('ice-update', { detail: 388.75 }))}>▲ Simulate price spike</button>
+        <button className="twk-btn" style={{ marginTop: 4 }} onClick={() => window.dispatchEvent(new CustomEvent('ice-update', { detail: 374.20 }))}>▼ Simulate price drop</button>
+      </TweaksPanel>
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>

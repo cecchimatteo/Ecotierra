@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} — {{ platform_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="section-group">
+        <div class="section-header">
+            <i class="bi {{ page_icon }}"></i>
+            <span>Sourcing</span>
+        </div>
+        <h1 class="mb-2">{{ page_title }}</h1>
+        <p class="lead mb-0">{{ page_lead }}</p>
+    </div>
+    <div class="filter-section mt-4">
+        <p class="text-muted mb-0 small">Placeholder workspace — data and workflows will connect when backends are available.</p>
+    </div>
+</div>
+{% endblock %}

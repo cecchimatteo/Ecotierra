@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Home — {{ platform_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="section-group">
+        <div class="section-header">
+            <i class="bi bi-grid-fill"></i>
+            <span>Overview</span>
+        </div>
+        <h1 class="mb-2">Welcome to {{ platform_name }}</h1>
+        <p class="lead mb-0">Expand a section in the sidebar to open its pages — operations modules first; <strong>Administration</strong> includes Counterparties.</p>
+    </div>
+
+    {% for group in nav_groups %}
+    <div class="section-group {% if not loop.first %}mt-4{% endif %}">
+        <div class="section-header">
+            <i class="bi {{ group.icon }}"></i>
+            <span>{{ group.label }}</span>
+        </div>
+        <div class="row g-3">
+            {% if group.pages %}
+            {% for item in group.pages %}
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for(item.endpoint) }}" class="text-decoration-none fh-home-module-link">
+                    <div class="home-card">
+                        <i class="bi {{ item.icon }}"></i>
+                        <h5>{{ item.label }}</h5>
+                        <p>Open module</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col-12">
+                <p class="text-muted mb-0 small py-2">No pages linked yet — they will appear under this header in the sidebar and here.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

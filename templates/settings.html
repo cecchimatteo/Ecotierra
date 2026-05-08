@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block head_early_script %}
+<script>
+(function () {
+  try {
+    if (localStorage.getItem('fincahub_settings_nav_collapsed') === '1') {
+      document.documentElement.classList.add('fh-settings-nav-collapsed-init');
+    }
+  } catch (e) {}
+})();
+</script>
+{% endblock %}
+
+{% block title %}{{ current_settings_section.label }} — Settings — {{ platform_name }}{% endblock %}
+
+{% block content %}
+<div class="fh-settings-shell" id="fhSettingsShell">
+  <aside class="fh-settings-aside" id="fhSettingsAside" aria-labelledby="fh-settings-heading">
+    <div class="fh-settings-aside-toolbar">
+      <button
+        type="button"
+        class="fh-settings-nav-toggle"
+        id="fhSettingsNavToggle"
+        aria-controls="fh-settings-aside-nav"
+        aria-expanded="true"
+        title="Collapse settings menu"
+      >
+        <i class="bi bi-chevron-left" aria-hidden="true"></i>
+      </button>
+    </div>
+    <p id="fh-settings-heading" class="fh-settings-aside-label">
+      <i class="bi bi-list fh-settings-aside-label-icon" aria-hidden="true"></i>
+      <span class="fh-settings-aside-label-text">Settings</span>
+    </p>
+    <nav class="fh-settings-aside-nav" id="fh-settings-aside-nav" aria-label="Settings sections">
+      {% for sec in settings_sections %}
+      <a
+        href="{{ url_for('settings_section', slug=sec.slug) }}"
+        class="{% if sec.slug == active_settings_slug %}is-active{% endif %}"
+        title="{{ sec.label }}"
+      >
+        <i class="bi {{ sec.icon }}" aria-hidden="true"></i>
+        <span>{{ sec.label }}</span>
+      </a>
+      {% endfor %}
+    </nav>
+  </aside>
+
+  <article class="fh-settings-article">
+    <header class="fh-settings-panel-head">
+      <h1>{{ current_settings_section.label }}</h1>
+      {% if active_settings_slug != 'terminology-and-classification' %}
+      <p class="fh-settings-panel-lead">
+        {% if active_settings_slug == 'glossary' %}
+        Abbreviations and domain definitions used across FincaHub screens and documents — seed data for Azure PostgreSQL later.
+        {% else %}
+        Configure workspace defaults. Detailed forms and persistence will plug in later.
+        {% endif %}
+      </p>
+      {% endif %}
+    </header>
+    <div class="fh-settings-panel-body">
+      {% if active_settings_slug == 'terminology-and-classification' and terminology_blocks %}
+      {% for block in terminology_blocks %}
+      <section class="fh-term-section" aria-labelledby="fh-term-{{ block.id }}">
+        <header class="fh-term-section-head">
+          <h2 id="fh-term-{{ block.id }}">{{ block.title }}</h2>
+        </header>
+        <dl class="fh-term-list">
+          {% for row in block.entries %}
+          <div class="fh-term-row">
+            <dt>{{ row.label }}</dt>
+            <dd>{{ row.body }}</dd>
+          </div>
+          {% endfor %}
+        </dl>
+        {% for note in block.notes %}
+        <div class="fh-term-note" role="note">
+          <span class="fh-term-note-label">{{ note.label }}</span>
+          {{ note.body }}
+        </div>
+        {% endfor %}
+        {% if block.tables %}
+        {% for tbl in block.tables %}
+        {% if loop.index0 > 0 and block.entries_between_tables %}
+        <dl class="fh-term-list fh-term-list-between-tables">
+          {% for row in block.entries_between_tables %}
+          <div class="fh-term-row">
+            <dt>{{ row.label }}</dt>
+            <dd>{{ row.body }}</dd>
+          </div>
+          {% endfor %}
+        </dl>
+        {% endif %}
+        <div class="fh-term-table-wrap">
+          {% if tbl.caption %}
+          <p class="fh-term-table-caption" id="fh-table-cap-{{ tbl.key }}">{{ tbl.caption }}</p>
+          {% endif %}
+          <div class="table-responsive fh-term-table-responsive">
+            <table
+              class="table fh-term-table mb-0"
+              id="fh-table-{{ tbl.key }}"
+              {% if tbl.caption %}aria-labelledby="fh-table-cap-{{ tbl.key }}"{% else %}aria-label="{{ tbl.key|replace('-', ' ') }}"{% endif %}
+            >
+              <thead>
+                <tr>
+                  {% for col in tbl.columns %}
+                  <th scope="col">{{ col }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in tbl.rows %}
+                <tr>
+                  {% for cell in row %}
+                  <td>{{ cell }}</td>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </section>
+      {% endfor %}
+      {% elif active_settings_slug == 'entities' and key_entities %}
+      <section class="fh-term-section fh-entities-section" aria-labelledby="fh-entities-key-heading">
+        <header class="fh-term-section-head">
+          <h2 id="fh-entities-key-heading">{{ key_entities.title }}</h2>
+        </header>
+        <div class="fh-term-table-wrap fh-entities-table-wrap">
+          <div class="table-responsive fh-term-table-responsive">
+            <table
+              class="table fh-term-table fh-entities-table mb-0"
+              id="fh-table-key-entities"
+              aria-labelledby="fh-entities-key-heading"
+            >
+              <thead>
+                <tr>
+                  {% for col in key_entities.columns %}
+                  <th scope="col">{{ col }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in key_entities.rows %}
+                <tr>
+                  <td>{{ row[0] }}</td>
+                  <td>{{ row[1] }}</td>
+                  <td>{{ row[2] }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <p class="fh-muted-hint mt-3 mb-0">
+        Next: editable entity records, contacts, and approvals when an entity spans multiple subsidiaries — same keys in Azure PostgreSQL when you connect.
+      </p>
+      {% elif active_settings_slug == 'entities' %}
+      <p class="fh-placeholder-note">Entity reference data failed to load.</p>
+      {% elif active_settings_slug == 'identifier-formats' %}
+      <p class="fh-placeholder-note">
+        Set patterns for lots, batches, contracts, shipments, inventory units, and any barcodes or external references—so numbering stays consistent everywhere.
+      </p>
+      <p class="fh-muted-hint">Next: pattern builder (prefix / year / sequence), preview samples, and cross-checks against existing data in PostgreSQL.</p>
+      {% elif active_settings_slug == 'user-roles-access' %}
+      <p class="fh-placeholder-note">
+        Map organization roles (e.g. QC, trader, warehouse lead) to FincaHub permissions: which menus, APIs, exports, and price-sensitive fields each role may use.
+      </p>
+      <p class="fh-muted-hint">Next: role templates, segregation for Sales &amp; fixation, and audit of changes to access rules.</p>
+      {% elif active_settings_slug == 'glossary' and glossary_groups %}
+      {% for grp in glossary_groups %}
+      <section class="fh-term-section fh-glossary-group" aria-labelledby="fh-gl-{{ grp.id }}">
+        <header class="fh-term-section-head">
+          <h2 id="fh-gl-{{ grp.id }}">{{ grp.title }}</h2>
+          <p>{{ grp.summary }}</p>
+        </header>
+        <div class="fh-term-table-wrap fh-glossary-table-wrap">
+          <div class="table-responsive fh-term-table-responsive">
+            <table class="table fh-term-table fh-glossary-table mb-0" aria-describedby="fh-gl-{{ grp.id }}">
+              <thead>
+                <tr>
+                  <th scope="col">Term</th>
+                  <th scope="col">Definition</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in grp.rows %}
+                <tr class="{% if row.highlight %}fh-glossary-row-highlight{% endif %}">
+                  <td class="fh-glossary-term">{{ row.term }}</td>
+                  <td>{{ row.definition }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      {% endfor %}
+      <p class="fh-muted-hint mt-3 mb-0">Multilingual labels, versioning, and API exposure can reuse the same keyed rows (<code>row.key</code>) when you connect Postgres.</p>
+      {% endif %}
+    </div>
+  </article>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  var aside = document.getElementById('fhSettingsAside');
+  var shell = document.getElementById('fhSettingsShell');
+  var btn = document.getElementById('fhSettingsNavToggle');
+  if (!aside || !shell || !btn) return;
+
+  var KEY = 'fincahub_settings_nav_collapsed';
+  var icon = btn.querySelector('i');
+
+  function apply(collapsed) {
+    aside.classList.toggle('collapsed', collapsed);
+    shell.classList.toggle('fh-settings-shell--nav-collapsed', collapsed);
+    btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    btn.title = collapsed ? 'Expand settings menu' : 'Collapse settings menu';
+    if (icon) {
+      icon.className = collapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-left';
+    }
+    try {
+      localStorage.setItem(KEY, collapsed ? '1' : '0');
+    } catch (e) {}
+  }
+
+  apply(localStorage.getItem(KEY) === '1');
+  document.documentElement.classList.remove('fh-settings-nav-collapsed-init');
+
+  btn.addEventListener('click', function () {
+    apply(!aside.classList.contains('collapsed'));
+  });
+})();
+</script>
+{% endblock %}

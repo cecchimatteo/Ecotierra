@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Sourcing Dashboard — {{ platform_name }}{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/sourcing-dashboard.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="fh-sourcing-dash" id="fhSourcingDashboard">
+    <div class="fh-sd-page-header">
+        <div>
+            <h1>Sourcing Dashboard</h1>
+            <div class="fh-sd-subtitle">{{ mill_name }} · {{ dashboard_date }}</div>
+        </div>
+        <div class="fh-sd-actions">
+            <a href="#" class="btn-sd-primary" title="Coming soon"><i class="bi bi-plus-lg"></i> Log Daily Offer</a>
+            <a href="#" class="btn-sd-secondary" title="Coming soon"><i class="bi bi-box-seam"></i> Receive Lot</a>
+            <a href="#" class="btn-sd-outline btn-sd-header-outline" title="Coming soon" onclick="return false;"><i class="bi bi-file-earmark-plus"></i> Create PO</a>
+        </div>
+    </div>
+
+    <div class="fh-sd-kpi-hero">
+        <div class="fh-sd-kpi-hero-main">
+            <div class="fh-sd-kpi-bundle fh-sd-card">
+                <div class="fh-sd-kpi-bundle-inner">
+                    {% for k in kpis_main %}
+                    <div class="fh-sd-kpi-mini{% if k.highlight %} fh-sd-kpi-mini--highlight{% endif %}{% if k.clickable %} fh-sd-kpi-mini--clickable{% endif %}{% if k.href %} fh-sd-kpi-mini--nav{% endif %}"{% if k.overview_tab %} data-overview-jump="{{ k.overview_tab }}"{% endif %}{% if k.href %} data-href="{{ k.href }}"{% endif %}>
+                        <div class="fh-sd-kpi-mini-top">
+                            <div class="fh-sd-kpi-icon fh-sd-kpi-icon--sm {{ k.icon_class }}"><i class="bi {{ k.icon }}"></i></div>
+                            <span class="fh-sd-kpi-label">{{ k.label }}</span>
+                        </div>
+                        <div class="fh-sd-kpi-value fh-sd-kpi-value--sm">{{ k.value }}</div>
+                        <div class="fh-sd-kpi-sub">{{ k.sub }}</div>
+                        {% if k.overdue_fixations and k.overdue_fixations > 0 %}
+                        <div class="fh-sd-kpi-mini-overdue" role="status">
+                            <i class="bi bi-exclamation-triangle-fill fh-sd-kpi-mini-overdue-icon" aria-hidden="true"></i>
+                            <span><strong>{{ k.overdue_fixations }}</strong> overdue</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="fh-sd-card fh-sd-ice-card">
+            <div class="fh-sd-ice-inner">
+                <div class="fh-sd-ice-toolbar">
+                    <span class="fh-sd-ice-toolbar-title">ICE Coffee C</span>
+                    <div class="fh-sd-ice-select-wrap">
+                        <label class="fh-sd-sr-only" for="fhSdContractSelect">Futures contract</label>
+                        <select id="fhSdContractSelect" class="fh-sd-ice-contract-select" aria-label="ICE Coffee C contract month">
+                            {% for c in ice_contracts %}
+                            <option value="{{ c.id }}"{% if c.id == ice_contracts_default %} selected{% endif %}>{{ c.label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="fh-sd-ice-body">
+                    <div class="fh-sd-ice-main">
+                        <div class="fh-sd-ice-price-row">
+                            <span class="fh-sd-ice-price" id="fhSdIceLarge">382.50</span>
+                            <span class="fh-sd-ice-unit">¢/lb</span>
+                            <span class="fh-sd-ice-change" id="fhSdIceChg"><span id="fhSdIceChgArrow">▲</span><span id="fhSdIceChgNum">1.25</span></span>
+                        </div>
+                        <div class="fh-sd-ice-muted">NY market hours: 9:00–14:30 EST</div>
+                        <div class="fh-sd-ice-open">● Market Open</div>
+                    </div>
+                    <div class="fh-sd-ice-stats" aria-label="Session statistics">
+                        <div class="fh-sd-ice-stat-row"><span>Open</span><span id="fhSdIceStatOpen" class="fh-sd-ice-stat-val fh-sd-ice-stat-val--muted">381.25</span></div>
+                        <div class="fh-sd-ice-stat-row"><span>High</span><span id="fhSdIceStatHigh" class="fh-sd-ice-stat-val fh-sd-ice-stat-val--high">384.10</span></div>
+                        <div class="fh-sd-ice-stat-row"><span>Low</span><span id="fhSdIceStatLow" class="fh-sd-ice-stat-val fh-sd-ice-stat-val--low">380.50</span></div>
+                        <div class="fh-sd-ice-stat-row"><span>Settle</span><span id="fhSdIceStatSettle" class="fh-sd-ice-stat-val fh-sd-ice-stat-val--muted">382.50</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fh-sd-main-grid">
+        <div class="fh-sd-card fh-sd-overview-card">
+            <div class="fh-sd-card-header fh-sd-overview-header">
+                <h2>
+                    <i class="bi bi-grid-1x2" style="color: var(--sd-secondary);"></i>
+                    Overview
+                </h2>
+                <div class="fh-sd-overview-tabs" role="tablist" aria-label="Overview tables">
+                    {% for b in overview_buttons %}
+                    <button
+                        type="button"
+                        class="fh-sd-overview-tab{% if loop.first %} active{% endif %}"
+                        data-overview-tab="{{ b.id }}"
+                        role="tab"
+                        aria-selected="{{ 'true' if loop.first else 'false' }}"
+                    >
+                        <i class="bi {{ b.icon }}" aria-hidden="true"></i>
+                        <span>{{ b.label }}</span>
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+            {% for sec in overview_sections %}
+            <div class="fh-sd-overview-panel{% if loop.first %} active{% endif %}" data-overview-panel="{{ sec.id }}" role="tabpanel"{% if not loop.first %} hidden{% endif %}>
+                <div class="fh-sd-overview-scroll">
+                    <table class="fh-sd-table fh-sd-overview-table">
+                        <thead>
+                            <tr>
+                                {% for col in sec.columns %}
+                                <th>{{ col }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in sec.rows %}
+                            <tr>
+                                {% for cell in row %}
+                                <td>
+                                    {% if cell.t == 'pill' %}
+                                    <span class="fh-sd-pill fh-sd-pill--{{ cell.cls }}">{{ cell.v }}</span>
+                                    {% else %}
+                                    {{ cell.v }}
+                                    {% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="fh-sd-overview-pagination" aria-label="Overview table pages">
+                    <button type="button" class="fh-sd-page-btn" data-page-dir="prev" disabled>Previous</button>
+                    <span class="fh-sd-page-status">Page <span class="fh-sd-page-cur">1</span> of <span class="fh-sd-page-tot">1</span></span>
+                    <button type="button" class="fh-sd-page-btn" data-page-dir="next" disabled>Next</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="fh-sd-bottom-grid">
+        <div class="fh-sd-card fh-sd-bottom-panel fh-sd-chart-card">
+            <div class="fh-sd-card-header fh-sd-chart-header">
+                <div class="fh-sd-chart-header-main">
+                    <h2 class="fh-sd-chart-title-wrap">
+                        <i class="bi bi-graph-up" style="color: var(--sd-secondary);"></i>
+                        <span>ICE C Historical</span>
+                    </h2>
+                    <div class="fh-sd-chart-contract-line" aria-live="polite">
+                        <span class="fh-sd-chart-contract-label">Contract:</span>
+                        <strong id="fhSdChartContractLabel">{{ ice_feature_label }}</strong>
+                    </div>
+                </div>
+                <div class="fh-sd-range-btns">
+                    {% for r in ['24H', '5D', '1M', '3M', '6M'] %}
+                    <button type="button" class="fh-sd-range-btn{% if r == '24H' %} active{% endif %}" data-range="{{ r }}">{{ r }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="fh-sd-chart-body">
+                <canvas class="fh-sd-chart-canvas" id="fhSdIceCanvas" aria-label="ICE C price history"></canvas>
+                <div class="fh-sd-chart-footer">
+                    <span id="fhSdChartRangeHint">Range summary</span>
+                    <span style="color: var(--sd-secondary); font-weight: 600;">Live: <span id="fhSdLiveFooter">382.50</span> ¢/lb</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="fh-sd-card fh-sd-bottom-panel fh-sd-futures-quote-card">
+            <div class="fh-sd-card-header">
+                <h2>
+                    <i class="bi bi-calendar3" style="color: var(--sd-secondary);"></i>
+                    ICE Coffee C — contracts
+                </h2>
+            </div>
+            <div class="fh-sd-futures-scroll">
+                <table class="fh-sd-table fh-sd-futures-table">
+                    <thead>
+                        <tr>
+                            <th>Contract</th>
+                            <th class="num">Last (¢/lb)</th>
+                            <th class="num">Δ 1D</th>
+                            <th class="num">Δ 1W</th>
+                            <th class="num">Δ 1M</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in futures_quotes %}
+                        <tr data-contract-id="{{ row.contract_id }}">
+                            <td class="fh-sd-futures-contract">{{ row.label }}</td>
+                            <td class="num fh-sd-mono">{{ "%.2f"|format(row.last) }}</td>
+                            <td class="num fh-sd-mono fh-sd-delta{% if row.d1 >= 0 %} fh-sd-delta--up{% else %} fh-sd-delta--down{% endif %}">{{ "%+.2f"|format(row.d1) }}</td>
+                            <td class="num fh-sd-mono fh-sd-delta{% if row.d1w >= 0 %} fh-sd-delta--up{% else %} fh-sd-delta--down{% endif %}">{{ "%+.2f"|format(row.d1w) }}</td>
+                            <td class="num fh-sd-mono fh-sd-delta{% if row.d1m >= 0 %} fh-sd-delta--up{% else %} fh-sd-delta--down{% endif %}">{{ "%+.2f"|format(row.d1m) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="fhSdContractsMeta" type="application/json">{{ ice_contracts|tojson }}</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/sourcing-dashboard.js') }}"></script>
+{% endblock %}

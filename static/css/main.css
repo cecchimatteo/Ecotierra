@@ -1,0 +1,2494 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* AI Chat Widget Styles */
+.ai-chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.ai-company-selector {
+    padding: 10px;
+    border-bottom: 1px solid #e9ecef;
+    background-color: #f8f9fa;
+}
+
+.ai-company-selector label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+.ai-company-selector select {
+    width: 100%;
+    font-size: 13px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 6px 8px;
+}
+
+.ai-chat-toggle {
+    background: #2D5F3F;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.ai-chat-toggle:hover {
+    background: #1f4a2a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.ai-chat-container {
+    position: absolute;
+    bottom: 60px;
+    right: 0;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ai-chat-header {
+    background: #2D5F3F;
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px 6px 0 0;
+}
+
+.ai-chat-header h6 {
+    margin: 0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ai-chat-close {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.ai-chat-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.ai-chat-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background: #f8f9fa;
+}
+
+.ai-message {
+    margin-bottom: 12px;
+}
+
+.ai-message-content {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.ai-message-content i {
+    color: #667eea;
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+.ai-message-content div {
+    background: white;
+    padding: 10px 12px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.user-message {
+    margin-bottom: 12px;
+}
+
+.user-message-content {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.user-message-content div {
+    background: #667eea;
+    color: white;
+    padding: 10px 12px;
+    border-radius: 6px;
+    max-width: 80%;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.ai-chat-input {
+    padding: 12px 16px;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 8px;
+}
+
+.ai-chat-input input {
+    flex: 1;
+    border: 1px solid #dee2e6;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.ai-chat-input input:focus {
+    border-color: #667eea;
+}
+
+.ai-chat-input button {
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.ai-chat-input button:hover {
+    background: #5a6fd8;
+}
+
+.ai-chat-input button:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+    overflow-x: hidden;
+}
+
+/* KPI Cards */
+.kpi-card {
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e8e8e8;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    transition: all 0.2s ease;
+    height: 100%;
+    gap: 12px;
+}
+
+.kpi-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.kpi-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.kpi-icon.overdue {
+    background: #fff5f5;
+}
+
+.kpi-icon.cases {
+    background: #fff8e6;
+}
+
+.kpi-icon i {
+    font-size: 1.4rem;
+    color: #6c757d;
+}
+
+.kpi-icon.overdue i {
+    color: #dc3545;
+}
+
+.kpi-icon.cases i {
+    color: #fd7e14;
+}
+
+.kpi-icon.claims {
+    background: #fff0f0;
+}
+
+.kpi-icon.claims i {
+    color: #dc3545;
+}
+
+.kpi-icon.sales {
+    background: #f0f8ff;
+}
+
+.kpi-icon.sales i {
+    color: #0d6efd;
+}
+
+/* Insurance Requests Status Pills - EXACT SAME AS PRIOR WEBSITE */
+.status-pill {
+    display: inline-block;
+    min-width: 80px;
+    padding: 0.32em 1em;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.93em;
+    text-align: center;
+    letter-spacing: 0.02em;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    border: none;
+    background: #f5f5f5;
+    opacity: 0.97;
+}
+
+.pill-green {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.pill-yellow {
+    background: #fff8e1;
+    color: #f57f17;
+    border: 1px solid #ffecb3;
+}
+
+.pill-orange {
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffe0b2;
+}
+
+.pill-red {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+}
+
+.pill-gray {
+    background: #f5f5f5;
+    color: #6c757d;
+    border: 1px solid #e9ecef;
+}
+
+/* Insurance Requests Table Styles - EXACT SAME AS PRIOR WEBSITE */
+.details-row {
+    background-color: #f8f9fa !important;
+}
+
+.details-row td {
+    padding: 20px !important;
+}
+
+.customer-details {
+    padding: 1.5rem;
+    margin: 0.5rem 0;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e9ecef;
+}
+
+.customer-details p {
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+}
+
+.closed-badge {
+    background-color: #6c757d;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Related Entries Table - Improved Design */
+.related-entries {
+    margin-top: 1.5rem;
+    max-width: 100%;
+}
+
+.related-entries h6 {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.related-entries .table {
+    background-color: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e9ecef;
+    font-size: 0.85rem;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.related-entries .table thead th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    color: #495057;
+    font-weight: 600;
+    padding: 8px 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.related-entries .table tbody td {
+    padding: 8px 6px;
+    border-bottom: 1px solid #f1f3f4;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.related-entries .table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.related-entries .table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Fix table layout overflow */
+.related-entries .table-responsive {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+/* Approval Ratio Circle */
+.approval-ratio-cell svg {
+    transform: rotate(-90deg);
+}
+
+.approval-ratio-cell circle {
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+/* Expandable Rows - Original Design */
+.main-row.expanded {
+    background-color: #f8f9fa;
+}
+
+.toggle-details {
+    transition: transform 0.2s ease;
+}
+
+.toggle-details i {
+    transition: transform 0.2s ease;
+}
+
+.toggle-details:hover i {
+    transform: scale(1.1);
+}
+
+.kpi-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.kpi-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+    line-height: 1.1;
+}
+
+.kpi-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Section Dividers */
+.section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e8e8e8, transparent);
+    margin: 30px 0;
+}
+
+/* Header/Top Bar */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background: #ffffff;
+    color: #333333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.header .logo {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.header .logo img {
+    height: 100%;
+    max-width: 200px;
+}
+
+/* COPAP Logo - Convert white letters to green (rgb(45, 103, 88) = #2D6758) */
+.header .logo img.copap-logo {
+    /* Use CSS filter to convert white (#FFFFFF) to target green (#2D6758 = rgb(45, 103, 88)) */
+    /* The inline style on the img tag will override this, but this serves as a fallback */
+    filter: brightness(0) saturate(100%) invert(17%) sepia(30%) saturate(1300%) hue-rotate(142deg) brightness(0.36) contrast(1.2);
+}
+
+.header .title {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #2c3e50;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.header .user-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header .user-controls i {
+    color: #7f8c8d;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.header .user-controls i:hover {
+    color: #3498db;
+}
+
+.header .user-controls .header-icon-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    color: inherit;
+}
+
+.header .user-controls .header-icon-btn:focus {
+    outline: none;
+}
+
+.header .user-controls .header-icon-btn:focus-visible {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.header .user-controls .header-icon-btn i {
+    color: #7f8c8d;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.header .user-controls .header-icon-btn:hover i,
+.header .user-controls .header-icon-btn:focus-visible i {
+    color: #3498db;
+}
+
+/* User Menu Dropdown */
+.user-menu-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.user-menu-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #7f8c8d;
+    transition: color 0.2s;
+}
+
+.user-menu-btn:hover {
+    color: #3498db;
+}
+
+.user-menu-btn i {
+    font-size: 18px;
+}
+
+.user-menu-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 10px);
+    background: white;
+    min-width: 220px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    z-index: 1001;
+    overflow: hidden;
+    border: 1px solid #e8e8e8;
+}
+
+.user-menu-content.show {
+    display: block;
+}
+
+.user-menu-header {
+    padding: 16px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.user-menu-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 4px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.user-menu-email {
+    font-size: 11px;
+    color: #6c757d;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.user-menu-divider {
+    height: 1px;
+    background: #e8e8e8;
+    margin: 8px 0;
+}
+
+.user-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #2c3e50;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+}
+
+.user-menu-item:hover {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+}
+
+.user-menu-item i {
+    font-size: 16px;
+    color: #6c757d;
+}
+
+.user-menu-item:hover i {
+    color: #dc3545;
+}
+
+/* Sidebar - Proper positioning with collapse support */
+.sidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 280px;
+    height: calc(100vh - 70px) !important;
+    min-height: calc(100vh - 70px) !important;
+    max-height: calc(100vh - 70px) !important;
+    background-color: #ffffff;
+    border-right: 1px solid #e8e8e8;
+    overflow-y: auto;
+    z-index: 999;
+    transition: width 0.3s ease, transform 0.3s ease, min-width 0.3s ease, max-width 0.3s ease !important;
+    transition-property: width, transform, min-width, max-width !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    contain: strict !important;
+}
+
+/* ============================================
+   COLLAPSED SIDEBAR - MAXIMUM SPECIFICITY
+   ============================================ */
+.sidebar.collapsed {
+    width: 64px !important;
+    min-width: 64px !important;
+    max-width: 64px !important;
+    /* Height set via JavaScript - do not set here to prevent jumps */
+    transform: translateX(0) !important;
+    background-color: #ffffff !important;
+}
+
+/* Ensure sidebar expands properly when collapsed class is removed - HIGHEST PRIORITY */
+.sidebar:not(.collapsed),
+.sidebar:not([class*="collapsed"]) {
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    transform: translateX(0) !important;
+}
+
+/* Hide text when sidebar is collapsed */
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .nav-group-header > div > span,
+.sidebar.collapsed .nav-group-header .group-toggle {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Show text when sidebar is expanded (not collapsed) */
+.sidebar:not(.collapsed) .nav-item span,
+.sidebar:not(.collapsed) .nav-group-header > div > span,
+.sidebar:not(.collapsed) .nav-group-header .group-toggle {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* Show nav-group-items when sidebar is expanded */
+.sidebar:not(.collapsed) .nav-group-items {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Ensure nav items show properly when expanded - exact format - override collapsed styles */
+.sidebar:not(.collapsed) .nav-item {
+    justify-content: flex-start !important;
+    padding: 12px 20px !important;
+    min-height: 44px !important;
+    height: 44px !important;
+    max-height: 44px !important;
+    align-items: center !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* Ensure nav group headers show properly when expanded - exact format - override collapsed styles */
+.sidebar:not(.collapsed) .nav-group-header {
+    justify-content: space-between !important;
+    padding: 12px 20px !important;
+    min-height: 44px !important;
+    height: 44px !important;
+    max-height: 44px !important;
+    align-items: center !important;
+    margin-top: 0 !important;
+    margin-bottom: 4px !important;
+    flex-shrink: 0 !important;
+}
+
+.sidebar:not(.collapsed) .nav-group-header > div:first-child {
+    justify-content: flex-start !important;
+    width: auto !important;
+    gap: 12px !important;
+}
+
+/* Ensure icons have correct spacing when expanded */
+.sidebar:not(.collapsed) .nav-item i,
+.sidebar:not(.collapsed) .nav-item .bi {
+    margin-right: 12px !important;
+    font-size: 14px !important;
+    width: 18px !important;
+    min-width: 18px !important;
+}
+
+.sidebar:not(.collapsed) .nav-group-header > div > i,
+.sidebar:not(.collapsed) .nav-group-header > div > .bi {
+    font-size: 14px !important;
+    width: 18px !important;
+    min-width: 18px !important;
+    margin-right: 0 !important;
+}
+
+/* Ensure sidebar-top-actions has correct format when expanded */
+.sidebar:not(.collapsed) .sidebar-top-actions {
+    display: flex !important;
+    gap: 8px !important;
+    padding: 12px 20px !important;
+    flex-direction: row !important;
+}
+
+.sidebar:not(.collapsed) .sidebar-icon-btn {
+    width: 40px !important;
+    height: 40px !important;
+    flex: 1 !important;
+}
+
+/* Hide nav-group-items by default when sidebar is collapsed, but allow expansion */
+.sidebar.collapsed .nav-group-items {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Show nav-group-items when parent group is expanded (even in collapsed sidebar) - HIGHEST PRIORITY */
+.sidebar.collapsed .nav-group-header.expanded + .nav-group-items,
+.sidebar.collapsed .nav-group-header.expanded + .nav-group-items.collapsed {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-height: 2000px !important;
+    overflow: visible !important;
+    height: auto !important;
+}
+
+/* Show nav items centered with icons only */
+.sidebar.collapsed .nav-item {
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 14px 0 !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    height: 48px !important;
+    max-height: 48px !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    flex-shrink: 0 !important;
+}
+
+.sidebar.collapsed .nav-item i,
+.sidebar.collapsed .nav-item .bi {
+    margin: 0 auto !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    font-size: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 14.01px !important;
+    min-width: 14.01px !important;
+    max-width: 14.01px !important;
+    height: 13.99px !important;
+    min-height: 13.99px !important;
+    max-height: 13.99px !important;
+    flex-shrink: 0 !important;
+    font-family: "bootstrap-icons" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+.sidebar.collapsed .nav-item i::before {
+    font-family: "bootstrap-icons" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    width: 14.01px !important;
+    height: 13.99px !important;
+    font-size: 14px !important;
+    display: inline-block !important;
+    line-height: 1 !important;
+    text-align: center !important;
+}
+
+/* Show nav items when their parent group is expanded in collapsed sidebar */
+.sidebar.collapsed .nav-group-items .nav-item {
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 12px 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 48px !important;
+    height: 48px !important;
+    max-height: 48px !important;
+    flex-shrink: 0 !important;
+}
+
+/* Nav group headers - show icons only when sidebar is collapsed */
+.sidebar.collapsed .nav-group-header {
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 12px 0 !important;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+    min-height: 48px !important;
+    height: 48px !important;
+    max-height: 48px !important;
+    display: flex !important;
+    border-left: none !important;
+    border-bottom: 1px solid #e8e8e8 !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    background: #ffffff !important;
+    flex-shrink: 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    cursor: pointer !important;
+}
+
+/* Show expanded state indicator when group is expanded in collapsed sidebar */
+.sidebar.collapsed .nav-group-header.expanded {
+    background: #f8f9fa !important;
+}
+
+.sidebar.collapsed .nav-group-header > div:first-child {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.sidebar.collapsed .nav-group-header > div:first-child > i,
+.sidebar.collapsed .nav-group-header > div:first-child > .bi {
+    margin: 0 auto !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    font-size: 14px !important;
+    color: #6c757d !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 14.01px !important;
+    min-width: 14.01px !important;
+    max-width: 14.01px !important;
+    height: 13.99px !important;
+    flex-shrink: 0 !important;
+    min-height: 13.99px !important;
+    max-height: 13.99px !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+    font-family: "bootstrap-icons" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+.sidebar.collapsed .nav-group-header > div:first-child > i::before {
+    font-family: "bootstrap-icons" !important;
+    font-style: normal !important;
+    width: 14.01px !important;
+    height: 13.99px !important;
+    font-size: 14px !important;
+    display: inline-block !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    font-weight: normal !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+.sidebar.collapsed .nav-group-header .group-toggle {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+.sidebar.collapsed .nav-group-header::before {
+    display: none !important;
+}
+
+/* Sidebar toggle button - always visible when collapsed */
+.sidebar.collapsed .sidebar-toggle {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+.sidebar.collapsed .sidebar-toggle i {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 14px !important;
+    width: 14.01px !important;
+    min-width: 14.01px !important;
+    max-width: 14.01px !important;
+    height: 13.99px !important;
+    min-height: 13.99px !important;
+    max-height: 13.99px !important;
+    width: auto !important;
+    height: auto !important;
+    font-family: "bootstrap-icons" !important;
+}
+
+/* Top action buttons - always visible */
+.sidebar.collapsed .sidebar-top-actions {
+    flex-direction: column !important;
+    padding: 12px 8px !important;
+    gap: 8px !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.sidebar.collapsed .sidebar-icon-btn {
+    width: 48px !important;
+    height: 48px !important;
+    flex: none !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.sidebar.collapsed .sidebar-icon-btn i {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 14px !important;
+    width: 14.01px !important;
+    min-width: 14.01px !important;
+    max-width: 14.01px !important;
+    height: 13.99px !important;
+    min-height: 13.99px !important;
+    max-height: 13.99px !important;
+    font-family: "bootstrap-icons" !important;
+}
+
+.sidebar-icon-btn i {
+    font-family: "bootstrap-icons" !important;
+}
+
+/* ============================================
+   FONT CONSISTENCY - INTER 14PX
+   ============================================ */
+.sidebar {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Apply Inter to text elements, but NOT to icons */
+.sidebar span,
+.sidebar div:not([class*="bi"]):not([class*="icon"]),
+.sidebar a:not([class*="bi"]):not([class*="icon"]),
+.sidebar button:not([class*="bi"]):not([class*="icon"]) {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+/* Bootstrap Icons MUST use their own font family - highest priority */
+.sidebar i,
+.sidebar .bi,
+.sidebar i[class^="bi-"],
+.sidebar i[class*=" bi-"],
+.sidebar [class*="bi-"],
+.sidebar *[class*="bi-"] {
+    font-family: "bootstrap-icons" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    line-height: 1 !important;
+    vertical-align: -.125em !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    speak: none !important;
+    text-rendering: auto !important;
+}
+
+.nav-item,
+.nav-item span,
+.nav-item a:not(i):not(.bi),
+.nav-group-header,
+.nav-group-header span,
+.nav-group-header div:not(i):not(.bi) {
+    font-size: 12px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    line-height: 1.5 !important;
+}
+
+/* Ensure icons in nav items and group headers use Bootstrap Icons */
+.nav-item i,
+.nav-item .bi,
+.nav-group-header i,
+.nav-group-header .bi,
+.nav-group-header div i,
+.nav-group-header div .bi {
+    font-family: "bootstrap-icons" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+.nav-item span {
+    font-weight: 400 !important;
+}
+
+.nav-group-header span {
+    font-weight: 500 !important;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid #e8e8e8;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.sidebar.collapsed .sidebar-header {
+    padding: 20px 0;
+    justify-content: center;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.sidebar-logo-img {
+    height: 32px;
+    width: auto;
+}
+
+.sidebar-logo-text {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    color: #2d5f3f;
+    white-space: nowrap;
+    line-height: 1.5;
+}
+
+.sidebar.collapsed .sidebar-logo-text {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-logo-img {
+    height: 24px;
+}
+
+/* Top action buttons */
+.sidebar-top-actions {
+    display: flex;
+    gap: 8px;
+    padding: 12px 20px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.sidebar-icon-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #5a6c7d;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 18px;
+    flex: 1;
+}
+
+.sidebar-icon-btn:hover {
+    background: #f3f4f6;
+    color: #2c3e50;
+    border-color: #d1d5db;
+}
+
+.sidebar.collapsed .sidebar-top-actions {
+    flex-direction: column;
+    padding: 12px 8px;
+    gap: 8px;
+    display: flex !important;
+    visibility: visible !important;
+}
+
+.sidebar.collapsed .sidebar-icon-btn {
+    width: 48px;
+    height: 48px;
+    flex: none;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.sidebar-header h3 {
+    color: #2c3e50;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: none; /* Hide old h3, using logo instead */
+}
+
+/* Sidebar Search Modal */
+#sidebarSearchResults .list-group-item {
+    border: none;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 12px 16px;
+    transition: all 0.2s ease;
+}
+
+#sidebarSearchResults .list-group-item:hover {
+    background-color: #f8f9fa;
+    padding-left: 20px;
+}
+
+#sidebarSearchResults .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.sidebar-toggle {
+    position: relative;
+    background: none;
+    border: none;
+    color: #7f8c8d;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    z-index: 1000;
+    flex-shrink: 0;
+}
+
+.sidebar-toggle i {
+    font-family: "bootstrap-icons" !important;
+}
+
+.sidebar-toggle:hover {
+    background-color: #ecf0f1;
+    color: #3498db;
+}
+
+/* Floating toggle button for collapsed sidebar - hide it since we use narrow mode */
+.floating-toggle {
+    display: none !important;
+}
+
+.nav-items {
+    padding: 15px 0;
+    min-height: 0;
+    height: auto;
+}
+
+/* Ensure nav-items is visible when sidebar is collapsed */
+.sidebar.collapsed .nav-items {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    padding: 8px 0 !important;
+    width: 100% !important;
+}
+
+/* Force nav-group-header visibility in collapsed sidebar - highest priority */
+.sidebar.collapsed .nav-items .nav-group-header {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    margin: 4px 0 !important;
+    padding: 12px 0 !important;
+    flex-shrink: 0 !important;
+    contain: layout style paint !important;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #5a6c7d;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+    font-size: 12px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    position: relative;
+    line-height: 1.5;
+    min-height: 44px;
+}
+
+/* Hover state - light grey background */
+.nav-item:hover {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    border-left-color: #3498db;
+}
+
+/* Active state - light blue background, only for current page */
+.nav-item.active {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-left-color: #1976d2;
+    font-weight: 500;
+}
+
+/* Ensure hover doesn't override active state */
+.nav-item.active:hover {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-left-color: #1976d2;
+}
+
+.nav-item.coming-soon {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.nav-item.coming-soon:hover {
+    opacity: 1;
+}
+
+.coming-soon-badge {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #ff9800;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.sidebar.collapsed .coming-soon-badge {
+    display: none;
+}
+
+.nav-item i,
+.nav-item .bi {
+    margin-right: 12px;
+    font-size: 14px;
+    width: 18px;
+    min-width: 18px;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "bootstrap-icons" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+.nav-item span {
+    flex-grow: 1;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+}
+
+/* Navigation Group Headers - Customize List Style */
+.nav-group-header {
+    padding: 12px 20px;
+    font-size: 12px !important;
+    font-weight: 500;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #212529;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: none;
+    border-bottom: 1px solid #e8e8e8;
+    border-radius: 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    box-shadow: none;
+    position: relative;
+    line-height: 1.5;
+    min-height: 48px !important;
+    height: 48px !important;
+    max-height: 48px !important;
+}
+
+.nav-group-header::before {
+    display: none;
+}
+
+.nav-group-header:hover {
+    background-color: #f8f9fa;
+    box-shadow: none;
+    transform: none;
+}
+
+.nav-group-header > div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.nav-group-header > div > i,
+.nav-group-header > div > .bi {
+    font-size: 14px;
+    color: #6c757d;
+    width: 18px;
+    min-width: 18px;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "bootstrap-icons" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+.nav-group-header .group-toggle {
+    font-size: 11px;
+    color: #6c757d;
+    transition: transform 0.2s ease;
+}
+
+.nav-group-header .group-toggle {
+    font-size: 10px;
+    color: #6c757d;
+    transition: transform 0.2s ease;
+}
+
+.nav-group-header.collapsed .group-toggle {
+    transform: rotate(-90deg);
+}
+
+/* Duplicate rule removed - using the one above with gap: 12px */
+
+.nav-group-header span {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    line-height: 1.5 !important;
+}
+
+/* Navigation Group Items - Start collapsed by default */
+.nav-group-items {
+    overflow: hidden !important;
+    transition: none !important;
+    max-height: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.nav-group-items:not(.collapsed) {
+    transition: max-height 0.3s ease !important;
+    max-height: 1000px !important;
+    height: auto !important;
+}
+
+.nav-group-items .nav-item {
+    padding-left: 40px;
+}
+
+/* When sidebar is collapsed, remove left padding from nav items in expanded groups */
+.sidebar.collapsed .nav-group-items .nav-item {
+    padding-left: 0 !important;
+}
+
+/* When sidebar is expanded, nav items in groups should have proper padding */
+.sidebar:not(.collapsed) .nav-group-items .nav-item {
+    justify-content: flex-start !important;
+    padding-left: 40px !important;
+    padding-right: 20px !important;
+}
+
+/* Main Content - Proper spacing with sidebar */
+.main-content {
+    margin-left: 280px;
+    transition: margin-left 0.3s ease;
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
+    background-color: #f8f9fa;
+    transition: margin-left 0.3s ease;
+    width: calc(100% - 280px);
+    position: relative;
+}
+
+.main-content.expanded {
+    margin-left: 64px; /* Narrow sidebar width */
+    width: calc(100% - 64px);
+}
+
+.content-wrapper {
+    padding: 30px;
+}
+
+/* Home page cards */
+.home-card {
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #e8e8e8;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.home-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3498db, #2980b9);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.home-card:hover::before {
+    transform: scaleX(1);
+}
+
+.home-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: #3498db;
+}
+
+.home-card i {
+    font-size: 2rem;
+    color: #3498db;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.home-card:hover i {
+    transform: scale(1.1);
+}
+
+.home-card h5 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.home-card p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+    flex-grow: 1;
+}
+
+/* Quick Access Section */
+.quick-access-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 4px;
+    padding: 20px;
+    color: #495057;
+    margin-bottom: 30px;
+    border: 1px solid #dee2e6;
+}
+
+.quick-access-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.quick-access-card {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
+    color: #495057;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.quick-access-card:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    color: #007bff;
+    text-decoration: none;
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.quick-access-card i {
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.quick-access-card span {
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+/* 5-Column Layout */
+.col-lg-2-4 {
+    flex: 0 0 20%;
+    max-width: 20%;
+    position: relative;
+}
+
+/* Remove the borders between the 5 columns */
+.col-lg-2-4:not(:last-child)::after {
+    display: none;
+}
+
+@media (max-width: 1200px) {
+    .col-lg-2-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+    
+    .col-lg-2-4:nth-child(3n)::after {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .col-lg-2-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    .col-lg-2-4:nth-child(2n)::after {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .col-lg-2-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .col-lg-2-4::after {
+        display: none;
+    }
+}
+
+/* Section Columns */
+.section-column {
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-column-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 15px 20px;
+    border-bottom: 1px solid #e8e8e8;
+    border-radius: 6px 6px 0 0;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-column-header i {
+    font-size: 1.1rem;
+    color: #3498db;
+}
+
+.section-column-content {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.section-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #495057;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.section-link:last-child {
+    border-bottom: none;
+}
+
+.section-link:hover {
+    background: #f8f9fa;
+    color: #007bff;
+    text-decoration: none;
+    transform: translateX(3px);
+}
+
+.section-link i {
+    font-size: 1rem;
+    width: 16px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.section-link:hover i {
+    color: #007bff;
+}
+
+/* Module Modal Styles */
+.module-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.module-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #ffffff;
+}
+
+.module-item:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+}
+
+.module-item i {
+    font-size: 1.2rem;
+    width: 20px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.module-item span {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.current-quick-access {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.quick-access-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    background: #f8f9fa;
+    position: relative;
+}
+
+.quick-access-item i {
+    font-size: 1rem;
+    width: 16px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.quick-access-item span {
+    font-weight: 500;
+    font-size: 0.9rem;
+    flex-grow: 1;
+}
+
+.remove-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.remove-btn:hover {
+    background: #c82333;
+}
+
+/* Segment Modal Styles */
+.segment-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.segment-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #ffffff;
+}
+
+.segment-item:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+}
+
+.segment-item.active {
+    background: #e3f2fd;
+    border-color: #1976d2;
+    color: #1976d2;
+}
+
+.segment-item i {
+    font-size: 1.2rem;
+    width: 20px;
+    text-align: center;
+}
+
+.segment-item span {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.current-segment .segment-item {
+    background: #e8f5e8;
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.quick-access-settings {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.quick-access-settings .form-check {
+    margin-bottom: 8px;
+}
+
+.quick-access-settings .form-check-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Section Groups */
+.section-group {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 30px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #dee2e6;
+    color: #495057;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.section-header i {
+    color: #007bff;
+    font-size: 1.2rem;
+}
+
+/* Stat cards */
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 6px;
+    padding: 25px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-card h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* Form styles */
+.form-control, .form-select {
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+    padding: 12px 15px;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* Button styles */
+.btn {
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background-color: #27ae60;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #229954;
+    transform: translateY(-1px);
+}
+
+.btn-outline-secondary {
+    background-color: transparent;
+    color: #7f8c8d;
+    border: 1px solid #7f8c8d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #7f8c8d;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Table styles */
+.table {
+    margin-bottom: 0;
+    border: none;
+    background-color: #ffffff;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e8e8e8;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 15px 12px;
+    vertical-align: middle;
+    border-top: none;
+}
+
+.table tbody td {
+    padding: 12px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f1f1;
+    color: #5a6c7d;
+    font-size: 14px;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table-light {
+    background-color: #f8f9fa;
+}
+
+/* Card styles */
+.card {
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 20px;
+}
+
+.card-title {
+    margin: 0;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-body.p-0 {
+    padding: 0;
+}
+
+/* Pagination styles */
+.pagination .page-link {
+    border: 1px solid #e8e8e8;
+    color: #5a6c7d;
+    padding: 8px 12px;
+    margin: 0 2px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.pagination .page-link:hover {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #bdc3c7;
+    background-color: #f8f9fa;
+    border-color: #e8e8e8;
+    cursor: not-allowed;
+}
+
+/* Loading overlay */
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Modal styles */
+.modal-content {
+    border-radius: 6px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    border-bottom: 1px solid #e8e8e8;
+    padding: 20px;
+}
+
+.modal-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    border-top: 1px solid #e8e8e8;
+    padding: 20px;
+}
+
+/* Typography */
+h1 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.lead {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .content-wrapper {
+        padding: 20px;
+    }
+    
+    .header {
+        padding: 0 15px;
+    }
+    
+    .header .title {
+        font-size: 18px;
+    }
+}
+
+/* Ensure sidebar is visible on desktop by default */
+@media (min-width: 769px) {
+    .sidebar {
+        transform: translateX(0) !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Keep collapsed sidebar visible - just narrow it */
+    .sidebar.collapsed {
+        transform: translateX(0) !important;
+        width: 64px !important;
+    }
+}
+
+/* Filter section styles */
+.filter-section {
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e8e8e8;
+}
+
+.filter-group {
+    margin-bottom: 15px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+/* Table section styles */
+.table-section {
+    background-color: #ffffff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e8e8e8;
+}
+
+/* Text utilities */
+.text-muted {
+    color: #7f8c8d !important;
+}
+
+.text-danger {
+    color: #e74c3c !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-wrap {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.fw-medium {
+    font-weight: 500;
+}
+
+/* Spacing utilities */
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.mb-3 {
+    margin-bottom: 1rem;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.me-2 {
+    margin-right: 0.5rem;
+}
+
+.ms-2 {
+    margin-left: 0.5rem;
+}
+
+.py-4 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.p-3 {
+    padding: 1rem;
+}
+
+.p-0 {
+    padding: 0;
+}
+
+/* Flex utilities */
+.d-flex {
+    display: flex;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.justify-content-end {
+    justify-content: flex-end;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.align-items-end {
+    align-items: flex-end;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+/* Border utilities */
+.border-top {
+    border-top: 1px solid #e8e8e8;
+}
+
+/* Button group styles */
+.btn-group-sm > .btn {
+    padding: 5px 10px;
+    font-size: 11px;
+}
+
+/* Table responsive */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Accessibility */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Chart Section Styles */
+.chart-section {
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e8e8e8;
+    margin-bottom: 24px;
+}
+
+.chart-section h4 {
+    color: #333333;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-section h4::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+}
+
+.chart-container {
+    background: #fafafa;
+    border-radius: 6px;
+    padding: 16px;
+    border: 1px solid #e9ecef;
+}
+
+/* ============================================
+   BOOTSTRAP ICONS FIX - HIGHEST PRIORITY
+   Must be at the end to override all other rules
+   Bootstrap Icons use ::before pseudo-elements!
+   ============================================ */
+.sidebar i,
+.sidebar i.bi,
+.sidebar i[class*="bi-"],
+.sidebar i[class^="bi-"],
+.sidebar .bi,
+.sidebar .nav-item i,
+.sidebar .nav-item .bi,
+.sidebar .nav-group-header i,
+.sidebar .nav-group-header .bi,
+.sidebar .nav-group-header > div > i,
+.sidebar .nav-group-header > div > .bi,
+.sidebar .sidebar-toggle i,
+.sidebar .sidebar-icon-btn i,
+.sidebar i::before,
+.sidebar i.bi::before,
+.sidebar i[class*="bi-"]::before,
+.sidebar i[class^="bi-"]::before,
+.sidebar .bi::before,
+.sidebar .nav-item i::before,
+.sidebar .nav-item .bi::before,
+.sidebar .nav-group-header i::before,
+.sidebar .nav-group-header .bi::before,
+.sidebar .nav-group-header > div > i::before,
+.sidebar .nav-group-header > div > .bi::before,
+.sidebar .sidebar-toggle i::before,
+.sidebar .sidebar-icon-btn i::before {
+    font-family: "bootstrap-icons" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    line-height: 1 !important;
+    vertical-align: -.125em !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    speak: none !important;
+    text-rendering: auto !important;
+    display: inline-block !important;
+}
+
+.chart-container canvas {
+    border-radius: 6px;
+}
+
+/* FORCE COLLAPSED SIDEBAR ICON SIZES - MAXIMUM SPECIFICITY - MUST BE LAST */
+.sidebar.collapsed .nav-item i,
+.sidebar.collapsed .nav-item .bi,
+.sidebar.collapsed .nav-item i.bi,
+.sidebar.collapsed .nav-group-header > div:first-child > i,
+.sidebar.collapsed .nav-group-header > div:first-child > .bi,
+.sidebar.collapsed .nav-group-header > div:first-child > i.bi,
+.sidebar.collapsed .sidebar-toggle i,
+.sidebar.collapsed .sidebar-toggle i.bi,
+.sidebar.collapsed .sidebar-icon-btn i,
+.sidebar.collapsed .sidebar-icon-btn i.bi {
+    width: 14.01px !important;
+    min-width: 14.01px !important;
+    max-width: 14.01px !important;
+    height: 13.99px !important;
+    min-height: 13.99px !important;
+    max-height: 13.99px !important;
+    font-size: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    margin: 0 auto !important;
+    flex-shrink: 0 !important;
+}
+
+/* TARGET ::before PSEUDO-ELEMENTS FOR BOOTSTRAP ICONS - MAXIMUM SPECIFICITY */
+.sidebar.collapsed .nav-item i::before,
+.sidebar.collapsed .nav-item .bi::before,
+.sidebar.collapsed .nav-item i.bi::before,
+.sidebar.collapsed .nav-item i[class*="bi-"]::before,
+.sidebar.collapsed .nav-group-header > div:first-child > i::before,
+.sidebar.collapsed .nav-group-header > div:first-child > .bi::before,
+.sidebar.collapsed .nav-group-header > div:first-child > i.bi::before,
+.sidebar.collapsed .nav-group-header > div:first-child > i[class*="bi-"]::before,
+.sidebar.collapsed .sidebar-toggle i::before,
+.sidebar.collapsed .sidebar-toggle i.bi::before,
+.sidebar.collapsed .sidebar-toggle i[class*="bi-"]::before,
+.sidebar.collapsed .sidebar-icon-btn i::before,
+.sidebar.collapsed .sidebar-icon-btn i.bi::before,
+.sidebar.collapsed .sidebar-icon-btn i[class*="bi-"]::before {
+    width: 14.01px !important;
+    min-width: 14.01px !important;
+    max-width: 14.01px !important;
+    height: 13.99px !important;
+    min-height: 13.99px !important;
+    max-height: 13.99px !important;
+    font-size: 14px !important;
+    display: block !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
+    margin: 0 auto !important;
+} 

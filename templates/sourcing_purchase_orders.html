@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block title %}Purchase Orders — {{ platform_name }}{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/sourcing-dashboard.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/sourcing-purchase-orders.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="fh-sourcing-dash fh-po-module" id="fhPoModule" data-mill-name="{{ mill_name | e }}">
+    <div class="fh-sd-page-header">
+        <div>
+            <h1>Purchase Orders</h1>
+            <div class="fh-sd-subtitle">{{ mill_name }} · PO list and fixation readiness</div>
+        </div>
+        <div class="fh-sd-actions">
+            <button type="button" class="btn-sd-outline btn-sd-header-outline" id="fhPoBackToList" hidden>
+                <i class="bi bi-arrow-left"></i> Back to list
+            </button>
+        </div>
+    </div>
+
+    <div id="fhPoListRoot">
+        <p class="fh-po-intro">
+            POs are system-generated from Daily Offers or accepted Mill Bids. This demo uses static data until APIs are wired;
+            list queries will enforce mill scope and the information barrier (no sell-side attributes).
+        </p>
+
+        <div class="fh-sd-kpi-hero fh-po-kpi-filter-hero">
+            <div class="fh-sd-kpi-hero-main fh-po-kpi-hero-main">
+                <div class="fh-po-kpi-two-cards">
+                    <div class="fh-sd-card fh-po-kpi-combo-card">
+                        <div class="fh-po-kpi-combo-head">
+                            <div class="fh-sd-kpi-icon fh-sd-kpi-icon--sm"><i class="bi bi-files"></i></div>
+                            <span class="fh-sd-kpi-label">Total POs</span>
+                        </div>
+                        <div class="fh-po-kpi-combo-body">
+                            <div class="fh-po-kpi-combo-stat">
+                                <div class="fh-po-kpi-combo-stat-label">Count</div>
+                                <div class="fh-sd-kpi-value fh-sd-kpi-value--sm" id="fhPoKpiTotalCount">0</div>
+                                <div class="fh-sd-kpi-sub">All purchase orders</div>
+                            </div>
+                            <div class="fh-po-kpi-combo-stat">
+                                <div class="fh-po-kpi-combo-stat-label">Value</div>
+                                <div class="fh-sd-kpi-value fh-sd-kpi-value--sm" id="fhPoKpiTotalValue">0</div>
+                                <div class="fh-sd-kpi-sub">Contracted QQ</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fh-sd-card fh-po-kpi-combo-card">
+                        <div class="fh-po-kpi-combo-head">
+                            <div class="fh-sd-kpi-icon fh-sd-kpi-icon--sm fh-sd-kpi-icon--info"><i class="bi bi-folder2-open"></i></div>
+                            <span class="fh-sd-kpi-label">Open POs</span>
+                        </div>
+                        <div class="fh-po-kpi-combo-body">
+                            <div class="fh-po-kpi-combo-stat">
+                                <div class="fh-po-kpi-combo-stat-label">Count</div>
+                                <div class="fh-sd-kpi-value fh-sd-kpi-value--sm" id="fhPoKpiOpenCount">0</div>
+                                <div class="fh-sd-kpi-sub">Not fully delivered</div>
+                            </div>
+                            <div class="fh-po-kpi-combo-stat">
+                                <div class="fh-po-kpi-combo-stat-label">Value</div>
+                                <div class="fh-sd-kpi-value fh-sd-kpi-value--sm" id="fhPoKpiOpenValue">0</div>
+                                <div class="fh-sd-kpi-sub">Contracted QQ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fh-po-filter-hero-aside">
+                <div class="fh-sd-card fh-po-filter-card">
+                    <div class="fh-po-filter-card-head">
+                        <span class="fh-po-filter-card-title"><i class="bi bi-funnel-fill" style="color: var(--sd-secondary);"></i> Filters</span>
+                        <span class="fh-sd-kpi-sub">Locked: <span id="lockedFiltersCount">0</span></span>
+                    </div>
+                    <div class="fh-po-card-pane fh-po-card-pane--compact">
+                        <div class="fh-po-unified-filter">
+                            <div class="fh-po-unified-search-wrap">
+                                <select id="unifiedSearchField" class="form-select form-select-sm fh-po-input-tight">
+                                    <option value="">All fields</option>
+                                    <option value="supplier">Supplier</option>
+                                    <option value="coffee">Coffee Type</option>
+                                    <option value="certification">Certification</option>
+                                    <option value="delivery_status">Delivery Status</option>
+                                    <option value="fixation_status">Fixation Status</option>
+                                    <option value="overall_status">Overall Status</option>
+                                </select>
+                                <input id="unifiedSearchInput" type="text" class="form-control form-control-sm fh-po-input-tight" placeholder="Search, then pick a row to lock…" autocomplete="off">
+                                <div id="searchDropdown" class="fh-po-search-dropdown" style="display:none;"></div>
+                            </div>
+                            <div class="fh-po-filter-controls fh-po-filter-controls--compact">
+                                <div class="fh-po-date-pair">
+                                    <label for="unifiedPoDateFrom" class="fh-po-inline-label">PO from</label>
+                                    <input id="unifiedPoDateFrom" type="date" class="form-control form-control-sm fh-po-input-tight">
+                                </div>
+                                <div class="fh-po-date-pair">
+                                    <label for="unifiedPoDateTo" class="fh-po-inline-label">PO to</label>
+                                    <input id="unifiedPoDateTo" type="date" class="form-control form-control-sm fh-po-input-tight">
+                                </div>
+                                <div class="fh-po-filter-checks">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="unifiedOverdueOnly">
+                                        <label class="form-check-label" for="unifiedOverdueOnly">Expired fix.</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="unifiedGateClearedOnly">
+                                        <label class="form-check-label" for="unifiedGateClearedOnly">Gate cleared</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="unifiedApproachingGateOnly">
+                                        <label class="form-check-label" for="unifiedApproachingGateOnly">Gate pending</label>
+                                    </div>
+                                </div>
+                                <div class="fh-po-filter-logic">
+                                    <button type="button" id="filterLogicAND" class="btn-sd-outline btn-sd-outline-sm active">AND</button>
+                                    <button type="button" id="filterLogicOR" class="btn-sd-outline btn-sd-outline-sm">OR</button>
+                                    <button type="button" class="btn-sd-outline btn-sd-outline-sm" id="clearAllFilters">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="lockedFilters" class="fh-po-locked-filters fh-po-locked-filters--inline"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fh-sd-main-grid fh-po-stack">
+            <div class="fh-sd-card fh-sd-overview-card fh-po-table-card">
+                <div class="fh-sd-card-header fh-po-table-card-head">
+                    <div class="fh-po-table-card-head-main">
+                        <h2>
+                            <i class="bi bi-grid-1x2" style="color: var(--sd-secondary);"></i>
+                            Purchase order list
+                        </h2>
+                        <div class="fh-sd-kpi-sub fh-po-sort-hint">
+                            Default sort: gate-cleared-not-submitted first · then expected delivery ascending
+                        </div>
+                    </div>
+                    <span id="fhPoResultCount" class="fh-po-result-count"></span>
+                </div>
+                <div class="fh-po-table-scroll">
+                    <table class="fh-sd-table fh-po-master-table">
+                        <thead>
+                            <tr>
+                                <th>PO number</th>
+                                <th>Supplier</th>
+                                <th>Coffee type</th>
+                                <th class="num">Contracted qty</th>
+                                <th>Buying differential</th>
+                                <th>Expected delivery</th>
+                                <th>Delivery</th>
+                                <th>Fixation</th>
+                                <th class="num">Days open</th>
+                                <th>Origin</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fhPoListBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="fhPoDetailRoot" hidden class="fh-sd-card fh-po-detail-root mt-3"></div>
+</div>
+
+<!-- Receive Lot Modal -->
+<div class="modal fade" id="fhPoReceiveLotModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-box-arrow-in-down me-2"></i>Receive Lot</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="fhPoReceiveLotForm">
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted mb-1">PO</label>
+                            <input id="fhPoRlPo" type="text" class="form-control form-control-sm" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted mb-1">Supplier</label>
+                            <input id="fhPoRlSupplier" type="text" class="form-control form-control-sm" readonly>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label small text-muted mb-1">Coffee type / variety</label>
+                            <input id="fhPoRlCoffee" name="coffee" type="text" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Expected delivery</label>
+                            <input id="fhPoRlExpected" type="text" class="form-control form-control-sm" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Truck weight</label>
+                            <input id="fhPoRlTruck" type="text" class="form-control form-control-sm" required placeholder="e.g. 19,800 kg">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Mill weight</label>
+                            <input id="fhPoRlMill" type="text" class="form-control form-control-sm" required placeholder="e.g. 19,760 kg">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Actual delivery date</label>
+                            <input id="fhPoRlActualDate" type="date" class="form-control form-control-sm" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Humidity %</label>
+                            <input id="fhPoRlHumid" type="number" step="0.01" class="form-control form-control-sm" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Water activity</label>
+                            <input id="fhPoRlAw" type="number" step="0.001" max="1" min="0" class="form-control form-control-sm" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small text-muted mb-1">Condition on arrival</label>
+                            <input id="fhPoRlCondition" type="text" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small text-muted mb-1">Receiving notes</label>
+                            <textarea id="fhPoRlNotes" class="form-control form-control-sm" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="alert alert-light border small mb-0" role="note">
+                        On submit: discrepancy check vs threshold (demo), Receiving QC task stub, Warehouse notification stub, fixation gate refresh (demo toast).
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="fhPoReceiveLotForm" class="btn btn-primary btn-sm">Receive lot</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Submit Fixation Modal -->
+<div class="modal fade" id="fhPoFixationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-lightning-fill me-2"></i>Submit Fixation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="fhPoFixationForm">
+                    <div class="mb-2">
+                        <label class="form-label small text-muted mb-1">PO</label>
+                        <input id="fhPoFxPo" type="text" class="form-control form-control-sm" readonly>
+                    </div>
+                    <div class="mb-3 small" id="fhPoFxInvoiceList"></div>
+                    <label class="form-label small fw-bold mb-2">Target invoice(s)</label>
+                    <div id="fhPoFxTargets" class="mb-3"></div>
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Order type</label>
+                            <select id="fhPoFxOrderType" name="orderType" class="form-select form-select-sm" required>
+                                <option value="Stop">Stop</option>
+                                <option value="GTC">GTC</option>
+                                <option value="Market">Market</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Requested level (¢/lb)</label>
+                            <input id="fhPoFxLevel" type="text" class="form-control form-control-sm" placeholder="n/a Market">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Futures month</label>
+                            <input id="fhPoFxMonth" type="text" class="form-control form-control-sm" placeholder="Sep 2026" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Volume (ICE lots)</label>
+                            <input id="fhPoFxVol" type="number" step="0.01" min="0" class="form-control form-control-sm" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1">Expiry (Stop/GTC)</label>
+                            <input id="fhPoFxExpiry" type="date" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="form-text mt-2">Validation stubs: gate-cleared invoices only; volume vs unfixed balance; futures consistency (demo).</div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="fhPoFixationForm" class="btn btn-primary btn-sm">Submit fixation</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel PO Modal -->
+<div class="modal fade" id="fhPoCancelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel purchase order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="small mb-2" id="fhPoCancelLead"></p>
+                <label class="form-label small">Reason (required)</label>
+                <textarea id="fhPoCancelReason" class="form-control form-control-sm" rows="3" required></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger btn-sm" id="fhPoCancelConfirm">Cancel PO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="fhPoDataJson" type="application/json">{{ purchase_orders|tojson }}</script>
+<script id="fhPoMetaJson" type="application/json">
+{{ {"fixation_url": url_for("sourcing_fixation"), "lot_intake_url": url_for("sourcing_lot_intake")} | tojson }}
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/sourcing-purchase-orders.js') }}"></script>
+{% endblock %}

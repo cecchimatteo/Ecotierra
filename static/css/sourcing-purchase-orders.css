@@ -1,0 +1,626 @@
+/* Purchase Orders — extends .fh-sourcing-dash (sourcing-dashboard.css first) */
+
+.fh-sourcing-dash.fh-po-module .fh-po-intro {
+  font-size: 12px;
+  color: var(--sd-muted);
+  line-height: 1.45;
+  max-width: 900px;
+  margin-bottom: 16px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-stack {
+  gap: 14px;
+}
+
+/* KPI + filter — same row as Sourcing Dashboard hero; wide filter column */
+.fh-sourcing-dash.fh-po-module .fh-po-kpi-filter-hero {
+  align-items: stretch;
+  margin-bottom: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, min(52vw, 560px));
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kpi-hero-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  min-height: 0;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kpi-two-cards {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+  min-height: 100%;
+  width: 100%;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kpi-combo-card {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kpi-combo-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--sd-border);
+  background: #f8f9fa;
+  flex-shrink: 0;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kpi-combo-body {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 0;
+  padding: 12px 14px 14px;
+  align-content: center;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kpi-combo-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 4px 0;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kpi-combo-stat:first-child {
+  border-right: 1px solid var(--sd-border);
+  padding-right: 12px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kpi-combo-stat:last-child {
+  padding-left: 12px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kpi-combo-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sd-muted);
+}
+
+@media (max-width: 575.98px) {
+  .fh-sourcing-dash.fh-po-module .fh-po-kpi-two-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-hero-aside {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-card {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--sd-border);
+  background: #f8f9fa;
+  flex-shrink: 0;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2c3e50;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-card-pane {
+  padding: 16px 20px 18px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-card-pane--compact {
+  padding: 8px 10px 10px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-unified-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-unified-search-wrap {
+  position: relative;
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  gap: 6px;
+  width: 100%;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-input-tight {
+  min-height: 28px !important;
+  padding: 2px 8px !important;
+  font-size: 11px !important;
+  line-height: 1.25;
+  border-color: var(--sd-border);
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-search-dropdown {
+  position: absolute;
+  z-index: 20;
+  left: 124px;
+  right: 0;
+  top: 30px;
+  max-height: 220px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid var(--sd-border);
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-search-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  border-bottom: 1px solid #f1f3f5;
+  background: #fff;
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #334155;
+  cursor: pointer;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-search-item:hover {
+  background: #f8fafc;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-search-item span {
+  color: #6b7280;
+  font-size: 11px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-search-empty {
+  color: #9ca3af;
+  font-size: 11px;
+  padding: 8px 10px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-logic {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-logic .btn-sd-outline.active {
+  border-color: var(--sd-secondary);
+  color: var(--sd-secondary);
+  background: #e6f7fb;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-controls--compact {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 6px 8px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-date-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-inline-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--sd-muted);
+  margin: 0;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-date-pair .form-control {
+  width: 128px;
+  min-width: 0;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-checks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding-bottom: 2px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-checks .form-check {
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-checks .form-check-label {
+  font-size: 10px;
+  color: #4b5563;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-checks .form-check-input {
+  margin-top: 0.15em;
+  width: 0.85em;
+  height: 0.85em;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-controls--compact .fh-po-filter-logic {
+  margin-left: auto;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-filter-controls--compact .btn-sd-outline-sm {
+  padding: 3px 8px;
+  font-size: 10px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-locked-filters--inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  min-height: 22px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-locked-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid #c7edf5;
+  background: #f1fbfe;
+  font-size: 11px;
+  color: #0b7285;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-locked-chip button {
+  border: none;
+  background: transparent;
+  color: #0b7285;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Table card header: title + subtitle + count */
+.fh-sourcing-dash.fh-po-module .fh-po-table-card-head {
+  align-items: flex-start;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-table-card-head-main {
+  flex: 1;
+  min-width: 200px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-sort-hint {
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-result-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sd-muted);
+  white-space: nowrap;
+  padding-top: 4px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-master-table {
+  table-layout: auto;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-master-table thead th,
+.fh-sourcing-dash.fh-po-module .fh-po-master-table tbody td {
+  white-space: nowrap;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-master-table tbody td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  vertical-align: middle;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-sd-table th.num,
+.fh-sourcing-dash.fh-po-module .fh-sd-table td.num {
+  text-align: right;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-badge-pair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.fh-sourcing-dash.fh-po-module tbody tr.fh-sd-row-clickable {
+  cursor: pointer;
+}
+
+/* Row highlight + selection */
+.fh-sourcing-dash.fh-po-module tbody tr.fh-po-row-selected td {
+  background: rgba(0, 150, 186, 0.07) !important;
+}
+
+.fh-sourcing-dash.fh-po-module tbody tr.fh-po-row-selected:hover td {
+  background: rgba(0, 150, 186, 0.1) !important;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-row-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-row-actions .btn-sd-outline-sm {
+  min-width: 58px;
+  font-size: 11px;
+  padding: 4px 10px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-row-menu .dropdown-menu {
+  min-width: 168px;
+  font-size: 12px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-menu-btn {
+  min-width: 32px !important;
+  padding: 4px 8px !important;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-menu-btn i {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Origin chip — secondary accent like dashboard links */
+.fh-sourcing-dash.fh-po-module .fh-po-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(0, 150, 186, 0.08);
+  color: var(--sd-secondary);
+  border: 1px solid rgba(0, 150, 186, 0.22);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-chip i {
+  width: 12px;
+  height: 12px;
+  font-size: 12px;
+  line-height: 12px;
+  flex: 0 0 12px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-chip:hover {
+  background: rgba(0, 150, 186, 0.14);
+  color: #007a99;
+}
+
+/* Detail surface (inside .fh-sd-card) */
+.fh-sourcing-dash.fh-po-module .fh-po-detail-root.fh-sd-card {
+  overflow: hidden;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-detail-hero {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-detail-hero-text {
+  flex: 1;
+  min-width: 220px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-detail-badges-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+  max-width: 100%;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-detail-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--sd-border);
+  background: #fff;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-detail-body {
+  padding: 16px 20px 24px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-section {
+  margin-bottom: 22px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px 18px;
+  font-size: 13px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kv-grid dt {
+  margin: 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--sd-muted);
+  font-weight: 600;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-kv-grid dd {
+  margin: 2px 0 0;
+  color: #212529;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-summary-line {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-flag-warn {
+  color: var(--sd-pill-yellow-text);
+  font-weight: 600;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-gate-card {
+  border: 1px solid var(--sd-border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: #fafbfc;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-gate-card h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-gate-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-gate-row .bi-check-circle-fill {
+  color: var(--sd-pill-green-text);
+  margin-top: 2px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-gate-row .bi-x-circle-fill {
+  color: var(--sd-accent);
+  margin-top: 2px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-activity {
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--sd-border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: #fafafa;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-activity-item {
+  font-size: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eceff1;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-activity-item:last-child {
+  border-bottom: none;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-activity-item time {
+  display: block;
+  font-size: 10px;
+  color: var(--sd-muted);
+  margin-bottom: 2px;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-placeholder-row td {
+  color: var(--sd-muted);
+  font-style: italic;
+  background: #fcfdfe;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-discrepancy-warn {
+  background: var(--sd-pill-yellow-bg) !important;
+}
+
+.fh-sourcing-dash.fh-po-module .fh-po-detail-root {
+  animation: fhPoFadeIn 0.2s ease;
+}
+
+@keyframes fhPoFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .fh-sourcing-dash.fh-po-module .fh-po-filter-hero-aside {
+    max-width: none;
+  }
+
+  .fh-sourcing-dash.fh-po-module .fh-po-unified-search-wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .fh-sourcing-dash.fh-po-module .fh-po-search-dropdown {
+    left: 0;
+    top: 62px;
+  }
+}
